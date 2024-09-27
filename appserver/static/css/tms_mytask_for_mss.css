@@ -1,0 +1,617 @@
+/* .dashboard-row .dashboard-panel .panel-body.html{
+    padding:0;
+} */
+
+.dashboard-panel{
+    min-height:unset!important;
+}
+.dashboard-row .dashboard-panel .panel-element-row div.single{
+    min-width: unset!important;
+}
+
+.dashboard-cell.hidden, .dashboard-row.hidden, .edit-mode .element-footer, .edit-mode .refresh-time-indicator, .preview-body .element-footer {
+    display: none !important;
+}
+.btn-pill.search,.btn-pill.inspect,.btn-pill.refresh,.btn-pill.stopSearch,.refresh-time-indicator.dashboard-element-timeindicator{
+    display: none !important;
+}
+
+.html h2 {
+    margin: 10px !important;
+}
+
+.icon_img, .unclaimed_img, .claim_img, .processing_img, .fail_img, .completed_img{
+    float:left;
+    display:block;
+    height: 40px;
+    width: 40px;
+    /* margin-top: 10px;
+    margin-left: 33%; */
+    margin: auto;
+    background-size: 100% !important;
+}
+.unclaimed_img.task_info{
+    background: url(../images/未认领.png);
+}
+.claim_img.task_info{
+    background: url(../images/认领.png);
+}
+.processing_img.task_info{
+    background: url(../images/处理中.png);
+}
+.fail_img.task_info{
+    background: url(../images/未通过.png);
+}
+.completed_img.task_info{
+    background: url(../images/已完成.png);
+}
+
+.icon_img.org{
+    background: url(../icon/组织单位.png);
+}
+.icon_img.bus{
+    background: url(../icon/业务系统_bule2.png);
+}
+.icon_img.dev_ip{
+    background: url(../icon/IP资产.png);
+}
+.icon_img.domain{
+    background: url(../icon/互联网资产.png);
+}
+
+
+.i_img{float: right;display: block;height: 40px;width: 40px;background-size: 100% !important;margin: -20% 10% 0 0;}
+.business_img1{
+    background: url(../icon/业务系统.png);
+    background-size:100% 100%;
+}
+.highport_img{
+    background: url(../icon/端口.png);
+}
+.pathscan_img{
+    background: url(../icon/敏感目录.png);
+}
+
+
+/* 定义滚动条样式 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(240, 240, 240, 1);
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    /* box-shadow: inset 0 0 0px rgba(240, 240, 240, .5); */
+    box-shadow: inset 0 0 0px #ffffff;
+    border-radius: 10px;
+    /* background-color: rgba(240, 240, 240, .5);
+     */
+    background-color: #ffffff;
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 0px #e1e6eb;
+    background-color: #e1e6eb;
+    /* box-shadow: inset 0 0 0px rgba(240, 240, 240, .5); */
+    /* background-color: rgba(240, 240, 240, .5); */
+    /* box-shadow: inset 0 0 0px rgba(237, 44, 37, .5); */
+    /* background-color: rgba(237, 44, 37, .5); */
+
+}
+
+/* 资产统计样式 */
+.event_1{
+    width: 100%;
+    /* min-height: 270px; */
+    display: flex;
+    flex-direction: column;  
+}
+.event_2{
+    width: 100%;
+    /* min-height: 140px; */
+    height: 123px;
+    display: flex;
+    /* border-bottom: 5px solid #f1f4f5; */
+}
+.event1_1 {
+    width:100%;
+    min-height: 123px;
+    float:left;
+    display: flex;
+    text-align:center;
+}
+.event1_2 {
+    width:100%;
+    min-height: 123px;
+    float:left;
+    display: flex;
+    text-align:center;
+    /* border-left: 5px solid #f1f4f5; */
+}
+
+.event2 {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    font-size: 16px;
+    margin: auto;
+}
+.event3 {
+    width: 20%;
+    height: 100%;
+    margin-top: 25px;
+    text-align: right;
+    font-size: 14px;
+}
+.event4 {
+    width: 20%;
+    height: 100%;
+    margin-top: 25px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.anum1{
+    width:50%;
+    margin: auto;
+    font-size: 16px;
+    color: black;
+    text-align: center;
+}
+
+.anum{
+    font-size: 22px;
+    /* margin: 10%; */
+    font-weight: 400;
+
+    color:#006eaa;
+}
+
+
+/* 认领状态底色 */
+.radius_div{
+    position: relative;
+    margin: 0 50%;
+    padding: 0px -12px;
+    left: -16px;
+}
+
+.radius_div2{
+    border-radius: 10px;
+    width: 40px;
+    /* margin: auto;
+    text-align: center; */
+    min-width: max-content;
+    padding: 0 5px;
+}
+
+.radius_div2.red{
+    background-color: #c00000;
+    color: white;
+}
+.radius_div2.grey{
+    background-color: #c3cbd4;
+    color: white;
+    border: 1px solid #c3cbd4;
+}
+.radius_div2.blue{
+    /* background-color: #006D9C; */
+    color: white;
+    /* border: 1px solid #006D9C; */
+    background-color: #0073e7; 
+    border: 1px solid #0073e7;
+}
+
+.radius_div2.green{
+    background-color: #249087;
+    color: white;
+}
+
+.tab-img{
+    width: 20px;
+    height: 20px;
+    background-size: 100% !important;
+    float: left;
+    margin: 5px 2px !important;
+}
+
+
+#tab-zjld{
+    background:url(../漏洞管理.png) 0 0 no-repeat;
+}
+
+#tab-yyld{
+    background:url(../web漏洞检测.png) 0 0 no-repeat;
+}
+
+#tab-hgjx{
+    background:url(../基线管理.png) 0 0 no-repeat;
+}
+
+#tab-rkl{
+    background:url(../弱口令.png) 0 0 no-repeat;
+}
+
+
+/* 前端简单编辑配置 */
+.popOutBg{ 
+    width:100%; 
+    height:100%; 
+    position:fixed; 
+    left:0; 
+    top:0; 
+    background:rgba(0,0,0,.6); 
+    display: none;
+    z-index:51;
+    } 
+.popOut{
+    position:fixed; 
+    width:600px; 
+    height:auto; 
+    top:20%; 
+    left:50%; 
+    margin-top:-50px;
+    margin-left:-300px; 
+    background:#fff;
+    border-radius:8px; 
+    overflow: hidden;
+    display: none;
+    z-index:52;
+    } 
+
+
+/* 修改展开样式 */
+.row-expansion-toggle{
+    padding-left: 0px !important;
+}
+.results-table table>tbody>tr>td.row-expansion-toggle a {
+    padding: 4px 0 4px 10px !important;
+}
+
+.icon-triangle-right-small:before {
+    content: "✚" !important;
+    color: #7abbfd;
+}
+
+.icon-triangle-down-small:before {
+    content: "━" !important;
+    color: #7abbfd;
+}
+
+
+/* 配置数值型居中 */
+td.numeric, th.numeric {
+    text-align: center !important;
+}
+
+#asm_vulner_overview_panel{
+    line-height: 0 !important;
+}
+
+#left.dashboard-cell.dashboard-layout-panel{
+    width: 16rem ;
+    /* height: 1800px!important; */
+}
+
+#asm_vulner_overview_panel.dashboard-layout-panel{
+    width: calc(100% - 0rem) ;
+    /* margin-left:20%; */
+        height: 535px;
+    background-color: white;
+}
+
+#left{
+    width: 16rem !important;;
+    /* height: 1800px!important; */
+}
+
+#asm_vulner_overview_panel{
+    width: calc(100% - 0rem) !important;;
+    /* margin-left:20%; */
+}
+
+#asm_vulner_overview_panel.panel_100{
+    width: calc(100%) !important;;
+    /* margin-left:20%; */
+}
+.H5Table{
+        width: 96% !important;
+    display: table;
+    margin-left: 4%;
+}
+.H5Table tr td:first-child{
+    width:50% !important;
+}
+.hideh5table,.showh5table{
+    float: right;
+}
+#hr1{
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #e1e6eb;
+    border-bottom: 1px solid #fff;
+}
+
+
+#zjld_row{
+    width: calc(100% - 0rem) !important;
+    float: right;
+}
+
+/* table th不换行 */
+#table_div th,#table_div td{
+    text-wrap: nowrap;
+}
+#table_div{
+    overflow: auto;
+    min-height:340px;
+    max-height: 38rem;
+}
+#table_div td{
+    word-break: break-all;
+    text-overflow: ellipsis;
+    /* display: -webkit-box; */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+#table_div thead th {
+  background-color: #f9f9f9; /* 表头背景色 */
+  position: sticky;
+  top: 0; /* 固定位置 */
+  z-index: 10; /* 确保始终在表格内容之上 */
+}
+
+.sticky_td{
+ display:table-cell;
+ border-left: 1px solid #e1e6eb;
+ position: sticky;
+ right: 0;
+ box-shadow: rgb(205, 205, 205) -2px 5px 10px;
+ background-color: white;
+}
+    
+
+/* #table_div .table_tbody_div{
+   display: block;
+  /* color: #fff; */
+  /* text-align: center; */
+  /* height: 340px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#table_div table thead,
+.table_tbody_div tr{
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+} */ */
+
+
+th[data-value="全选"]{
+    width:14px;
+}
+
+/* 出框内容隐藏 */
+.source_data_div {
+    width: auto;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    /* padding: 0px 12px; */
+    max-width: 19rem;
+    text-wrap: wrap;
+    min-width: 6rem;
+}
+
+#edit-internal-table td{
+    padding:10px;
+}
+
+/* 固定特定列不动 */
+.table th[data-field="操作"]{
+   position: sticky;
+   right: 0;
+   background-color: white;
+}
+.control-label{
+    margin-top: 10px;
+    width: 12%;
+    float: left;
+    text-align: right;
+}
+.field_select{
+    padding:5px 10px;
+}
+.field_select input{
+   margin-top:-5px;
+    margin-right:10px;
+}
+.modal-body{
+    overflow: auto;
+    max-height: calc(100vh - 60vh);
+}
+/* .sticky_td{
+ display:block;
+ position: sticky;
+ right: 0;
+ box-shadow: rgb(205, 205, 205) -2px 5px 10px;
+ background-color: white;
+} */
+
+/* 弹出框边缘圆化 */
+.modal.fade.in .modal-footer, .modal.fade.in .modal-header, .modal.fade.in {
+    border-radius: 8px;
+}
+
+#bulkEdit_save{
+    display: inline;
+    right: 0;
+    margin: -60px 40px 0 0;
+    position: absolute;
+}
+#bulkEdit_save ul{
+    list-style-type: none;
+    margin:0;
+    background: #d8dddc;
+    border-radius:5px;
+}
+#bulkEdit_save li{
+    padding:2px 20px;
+}
+.bulkEdit_updown{
+    margin-left: 40%;
+    font-size: 25px;
+    line-height: 8px;
+    color: #d8dddc;
+}
+#bulkEdit_save li:hover{
+ background: #c2cbcc;
+ cursor:pointer;
+}
+
+.tab-img{
+    width: 20px;
+    height: 20px;
+    background-size: 100% !important;
+    float: left;
+    margin: 5px 2px !important;
+}
+
+
+#tab-zjld-1x{
+    background:url(../icon/漏洞@1x.png) 0 0 no-repeat;
+}
+
+#tab-yyld-1x{
+    background:url(../icon/漏洞@1x.png) 0 0 no-repeat;
+}
+
+#tab-hgjx-1x{
+    background:url(../icon/安全基线@1x.png) 0 0 no-repeat;
+}
+
+#tab-rkl-1x{
+    background:url(../icon/弱口令@1x.png) 0 0 no-repeat;
+}
+
+.icon_img.task_info{
+    background: url(../images/任务配置.png);
+}
+
+/* 设置操作列样式*/
+.field_select .fZMhOZ{
+    width: 97% !important;
+}
+
+/* table 边框样式 */
+.table_border_left{
+    border-left: 1px solid #e1e6eb;
+}
+
+        #h2title{
+    font-size: 16px;
+    margin: 10px 0;
+    font-weight: bold;
+    padding-left: 10px;
+    color: gray;
+}
+        /* 资产统计样式 */
+.event_1{
+    width: 100%;
+    /* min-height: 270px; */
+    display: flex;
+    flex-direction: column;  
+}
+.event_2{
+    width: 100%;
+    /* min-height: 140px; */
+    height: 123px;
+    display: flex;
+    /* border-bottom: 5px solid #f1f4f5; */
+}
+.event1_1 {
+    width:100%;
+    min-height: 123px;
+    float:left;
+    display: flex;
+    text-align:center;
+}
+.event1_2 {
+    width:100%;
+    min-height: 123px;
+    float:left;
+    display: flex;
+    text-align:center;
+    /* border-left: 5px solid #f1f4f5; */
+}
+
+.event2 {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    font-size: 16px;
+    margin: auto;
+}
+.event3 {
+    width: 30%;
+    height: 100%;
+    margin-top: 25px;
+    text-align: right;
+    font-size: 14px;
+}
+.event4 {
+    width: 20%;
+    height: 100%;
+    margin-top: 25px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.anum1{
+    width:50%;
+    margin: auto;
+    font-size: 16px;
+    color: black;
+    text-align: center;
+}
+
+.anum{
+    font-size: 22px;
+    /* margin: 10%; */
+    font-weight: 400;
+
+    color:#006eaa;
+}
+#data_mem_type_link{
+  width:100%;
+}
+
+
+.rounddot_green::before {
+    content: "";
+    position: absolute;
+    margin: 8px -14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background-color: #249087;
+}
+
+.rounddot_grey::before {
+    content: "";
+    position: absolute;
+    margin: 8px -14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background-color: grey;
+}

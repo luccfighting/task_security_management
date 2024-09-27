@@ -1,0 +1,326 @@
+<form script="./js/tms_config.js" stylesheet="./css/font-awesome.min.css,./css/tms_config.css">
+  <label>任务配置</label>
+  <fieldset submitButton="false"></fieldset>
+  <row depends="$hide$">
+    <panel>
+      <input type="link" token="data_mem_type" id="data_mem_type_link">
+        <label></label>
+        <choice value="任务配置">任务配置</choice>
+        <choice value="IP视角">IP视角</choice>
+        <choice value="网段视角">网段视角</choice>
+        <default>任务配置</default>
+        <initialValue>IP视角</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row id="zjld_row">
+    <panel>
+      <html>
+        <!--<a id="zjld_export" style="    float: right;     position: absolute;     margin-top: -112px;     margin-left: 100%;     left: -85px;">前往导出&gt;&gt;</a>-->
+        
+        <div id="zjld_btn_div"/>
+      </html>
+    </panel>
+  </row>
+  <row id="asm_vulner_overview_row">
+    <panel id="left" depends="$hide$">
+      <html>
+         <div>
+            <div style="display: inline-block;">
+              <h2 id="h2title">
+                <i class="fa fa-list fa-fw"/>统计分析</h2>
+            </div>
+        </div>
+        <div style="text-align:center;">
+          <input type="text" id="search-left-menu" class="inp" style="width: -webkit-fill-available;margin:0px 10px;" onkeyup="searchFunction()" placeholder="关键字搜索"/>
+        </div>
+        <div style="overflow-y: auto;     height: 480px;padding: 10px;">
+          <div class="left_menu" data-value="组织名称" data-type="org_name">
+            <table style="width:100%" class="left-title-table" data-type="org_name">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">组织名称</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="org_name">展开</a>
+                    <a class="hideh5table" data-value="org_name">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="org_name">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="业务名称" data-type="bus_name">
+            <table style="width:100%" class="left-title-table" data-type="bus_name">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">业务名称</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="bus_name">展开</a>
+                    <a class="hideh5table" data-value="bus_name">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="bus_name">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="设备类型" data-type="dev_type">
+            <table style="width:100%" class="left-title-table" data-type="dev_type">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">资产类型</td>
+                <td id="risktd">
+                    <a class="showh5table" data-value="dev_type">展开</a>
+                    <a class="hideh5table" data-value="dev_type">收起</a>
+                  </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="dev_type">
+              <tr class="left-menu-tr" data-type="dev_type" data-value="网络设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="8" data-value="dev_type" data-type="key" data-search="网络设备" style="color:#4d5054;">网络设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="8" data-value="dev_type" data-type="value" data-search="网络设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="安全设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="3" data-value="dev_type" data-type="key" data-search="安全设备" style="color:#4d5054;">安全设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="3" data-value="dev_type" data-type="value" data-search="安全设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="运维设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="9" data-value="dev_type" data-type="key" data-search="运维设备" style="color:#4d5054;">运维设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="9" data-value="dev_type" data-type="value" data-search="运维设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="办公设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="5" data-value="dev_type" data-type="key" data-search="办公设备" style="color:#4d5054;">办公设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="5" data-value="dev_type" data-type="value" data-search="办公设备">0个</a>
+                      </td>
+                    </tr>
+                     <tr class="left-menu-tr" data-type="dev_type" data-value="服务器">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="6" data-value="dev_type" data-type="key" data-search="服务器" style="color:#4d5054;">服务器：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="6" data-value="dev_type" data-type="value" data-search="服务器">0个</a>
+                      </td>
+                    </tr>
+                
+                    
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="工控设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="4" data-value="dev_type" data-type="key" data-search="工控设备" style="color:#4d5054;">工控设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="4" data-value="dev_type" data-type="value" data-search="工控设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="物联网设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="7" data-value="dev_type" data-type="key" data-search="物联网设备" style="color:#4d5054;">物联网设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="7" data-value="dev_type" data-type="value" data-search="物联网设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="媒体设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="2" data-value="dev_type" data-type="key" data-search="媒体设备" style="color:#4d5054;">媒体设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="2" data-value="dev_type" data-type="value" data-search="媒体设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="保障设备">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="0" data-value="dev_type" data-type="key" data-search="保障设备" style="color:#4d5054;">保障设备：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="0" data-value="dev_type" data-type="value" data-search="保障设备">0个</a>
+                      </td>
+                    </tr>
+                    <tr class="left-menu-tr" data-type="dev_type" data-value="其它">
+                      <td id="td3" style="padding-top:5px;">
+                          <a class="depends" data-cid="10" data-value="dev_type" data-type="key" data-search="其它" style="color:#4d5054;">其它：</a>
+                        </td>
+                      <td style="padding-top:5px;">
+                        <a class="depends" data-cid="10" data-value="dev_type" data-type="value" data-search="其它">0个</a>
+                      </td>
+                    </tr>
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="部署区域" data-type="dev_zone">
+            <table style="width:100%" class="left-title-table" data-type="dev_zone">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">部署区域</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="dev_zone">展开</a>
+                    <a class="hideh5table" data-value="dev_zone">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="dev_zone">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="内外网" data-type="is_internal">
+            <table style="width:100%" class="left-title-table" data-type="is_internal">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">内外网</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="is_internal">展开</a>
+                    <a class="hideh5table" data-value="is_internal">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="is_internal">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="VLAN" data-type="vlan">
+            <table style="width:100%" class="left-title-table" data-type="vlan">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">VLAN</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="vlan">展开</a>
+                    <a class="hideh5table" data-value="vlan">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="vlan">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="资产状态" data-type="is_online">
+            <table style="width:100%" class="left-title-table" data-type="is_online">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">资产状态</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="is_online">展开</a>
+                    <a class="hideh5table" data-value="is_online">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="is_online">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="认领状态" data-type="dev_status">
+            <table style="width:100%" class="left-title-table" data-type="dev_status">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">认领状态</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="dev_status">展开</a>
+                    <a class="hideh5table" data-value="dev_status">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="dev_status">
+              
+            </table>
+          </div>
+          
+          <div class="left_menu" data-value="操作系统" data-type="os_release">
+            <table style="width:100%" class="left-title-table" data-type="os_release">
+              <tr>
+                <td colspan="2">
+                  <hr id="hr1"/>
+                </td>
+              </tr>
+              <tr>
+                <td id="risktd">操作系统</td>
+                <td id="risktd2">
+                    <a class="showh5table" data-value="os_release">展开</a>
+                    <a class="hideh5table" data-value="os_release">收起</a>
+                </td>
+              </tr>
+            </table>
+            <table style="width:100%" class="H5Table" data-value="os_release">
+              
+            </table>
+          </div>
+          
+
+        </div>
+      </html>
+    </panel>
+    <panel id="asm_vulner_overview_panel">
+      <input type="text" token="name" id="dev_ip_input">
+        <label>名称</label>
+      </input>
+      <input type="text" token="task_type" id="dev_name_input">
+        <label>任务属性</label>
+      </input>
+      <input type="text" token="level" id="dev_mac_input">
+        <label>级别</label>
+      </input>
+      <input type="text" token="create_user" id="vlan_input">
+        <label>创建人</label>
+      </input>
+      <html>
+        <div class="zjld_filter_label" style="margin-left: 12px;"/>
+        <div id="return_div" style="display:none">
+            <a class="btn-topsek-config" data-value="return" conf_id="">返回</a>
+          </div>
+         <div id="table_div"/>
+        <div id="table_tfoot_div" style="float: right;"/>
+    </html>
+    </panel>
+  </row>
+</form>

@@ -1,0 +1,18 @@
+<dashboard script="tms_related_contact_manager.js" stylesheet="./css/tms_related_contact_manager.css">
+  <label>联系人-审核</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| tmsapi "获取联系人" "$taskid$"
+| table name account role email mobile
+| rename name as 名称 account as 账号 email as 电子邮箱 mobile as 手机号 role as 角色</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

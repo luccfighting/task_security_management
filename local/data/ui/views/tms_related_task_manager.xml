@@ -1,0 +1,15 @@
+<dashboard script="tms_related_task_manager.js" stylesheet="./css/tms_related_task_manager.css">
+  <label>相关任务-审核</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>index=* host=*|timechart count by host</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

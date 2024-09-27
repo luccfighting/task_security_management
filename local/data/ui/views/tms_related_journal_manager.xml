@@ -1,0 +1,59 @@
+<dashboard script="tms_related_journal_manager.js" stylesheet="./css/tms_related_journal_manager.css">
+  <label>工作日志-审核</label>
+  <search>
+    <preview>
+      <set token="userid">$result.id$</set>
+      <set token="role">$result.role$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_user where account='$env:user$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+| table id role</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <search>
+    <preview>
+      <set token="isowner">$result.isowner$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_info where (user_name='$env:user$' OR role='$role$') and id='$taskid$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+|stats count|eval user="$env:user$"|eval isowner=if(count&gt;0 OR user="soc_manager","true","false")</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <search>
+    <preview>
+      <set token="task_status">$result.status$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_info where id='$taskid$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+|table status</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <row id="add_journal_row">
+    <panel>
+      <title>添加日志</title>
+      <html>
+        <textarea class="task_journal" task_id="$taskid$" user_id="$userid$" style="width:100%;min-height:250px" placeholder="请记录下你的工作过程"/>
+        <div style="text-align:center;">
+         <!--<button type="button" class="btn btn-primary btn-topsek " style="float:left;">编辑</button> -->
+       <button type="button" task_id="$taskid$" user_id="$userid$" class="btn btn-primary btn-horizon btn-topsek-addnewjournal ">提交</button>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>历史日志</title>
+      <table>
+        <search>
+          <query>| tmsapi "获取工作日志" "$taskid$"
+| table  *
+| rename create_time as 日志时间 name as 记录人 journal as 日志内容</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

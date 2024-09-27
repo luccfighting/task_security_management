@@ -1,0 +1,533 @@
+<form script="tms_config_task.js" stylesheet="./css/tms_config_task_for_cmsoc.css" hideEdit="true">
+  <label>任务管理</label>
+  <search>
+    <query>|tmsapi "获取SLA清单"|stats values(level) as level|eval level=mvjoin(level,"|"),role="一线|二线|三线",type="定期任务|安全事件"|eval firsttype="资产管理|风险识别|日常运行|应急响应|合规审计"|eval end_time=strftime(now(),"%F %T")</query>
+    <preview>
+      <condition>
+        <set token="level">$result.level$</set>
+        <set token="role">$result.role$</set>
+        <set token="type">$result.type$</set>
+        <!--<set token="firsttype">$result.firsttype$</set>-->
+        <set token="form.end_time">$result.end_time$</set>
+      </condition>
+    </preview>
+  </search>
+  <search>
+    <query>| readsoarworkflow|search webhook_app="*"
+| table id name|stats values(name) as name|eval name=mvjoin(name,"|")</query>
+    <preview>
+      <condition>
+        <set token="workflow">$result.name$</set>
+      </condition>
+    </preview>
+  </search>
+  <search>
+    <query>|makeresults
+|eval firsttype="资产管理|风险识别|日常运营" 
+| eval typelabel="资产漏洞管理成熟度"
+| append 
+    [| makeresults 
+| eval firsttype="资产管理|风险识别|日常运行|应急响应|合规审计" 
+| eval typelabel="安全运营成熟度"]
+| append 
+    [| makeresults 
+| eval firsttype="检测任务|合规任务"
+| eval typelabel="定期任务"]
+| append 
+    [| makeresults 
+| eval firsttype="研判处置|风险处置"
+| eval typelabel="安全事件"]
+|search typelabel="$typelabel$"</query>
+    <preview>
+      <condition>
+        <set token="firsttype">$result.firsttype$</set>
+      </condition>
+    </preview>
+  </search>
+  <search>
+    <query>| inputlookup asm_maturity_index.csv 
+| eval typelabel="资产漏洞管理成熟度" 
+| search typelabel="$typelabel$" 
+| search 安全类="$taskfirsttype$" 
+| dedup 安全控制点 
+| stats values(安全控制点) as secondtype 
+| eval secondtype=mvjoin(secondtype,"|") 
+| append 
+    [| inputlookup spcg_maturity_index.csv 
+    | eval typelabel="安全运营成熟度" 
+    | search typelabel="$typelabel$" 
+    | search 安全项="$taskfirsttype$" 
+    | dedup 安全控制点 
+    | stats values(安全控制点) as secondtype 
+    | eval secondtype=mvjoin(secondtype,"|") ]
+| append 
+    [|makeresults|eval secondtype="主机漏洞|应用漏洞|合规基线|弱口令"
+    | eval typelabel="定期任务" | eval 安全项="检测任务"
+    | search typelabel="$typelabel$" 
+    | search 安全项="$taskfirsttype$" 
+    | table secondtype ]
+| append 
+    [|makeresults|eval secondtype="安全物理环境|安全区域边界|安全计算环境|安全管理中心|安全管理制度|安全管理机构|安全管理人员|安全建设管理|安全运维管理"
+    | eval typelabel="定期任务" | eval 安全项="合规任务"
+    | search typelabel="$typelabel$" 
+    | search 安全项="$taskfirsttype$" 
+    | table secondtype ]</query>
+    <preview>
+      <condition>
+        <set token="secondtype">$result.secondtype$</set>
+      </condition>
+    </preview>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+        
+         <div style="text-align:right;margin: 5px 10px 0px 0px;">
+         <!--<button type="button" class="btn btn-primary btn-topsek " style="float:left;">编辑</button> -->
+       <button type="button" class="btn btn-primary btn-horizon btn-topsek3 ">新增</button>
+        </div>
+        <!-- <div>-->
+        <!--  <input style="width:60px" placeholder="年"/>-<input style="width:40px" placeholder="月"/>-<input style="width:40px" placeholder="日"/> <input style="width:40px" placeholder="时"/>:<input style="width:40px" placeholder="分"/>:<input style="width:40px" placeholder="秒"/>至<input style="width:60px" placeholder="年"/>-<input style="width:40px" placeholder="月"/>-<input style="width:40px" placeholder="日"/> <input style="width:40px" placeholder="时"/>:<input style="width:40px" placeholder="分"/>:<input style="width:40px" placeholder="秒"/>-->
+        <!--</div>-->
+        <!-- <div>-->
+        <!--  <input placeholder="XXXX-XX-XX XX:XX:XX"/>至<input placeholder="XXXX-XX-XX XX:XX:XX"/>-->
+        <!--</div>-->
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="text" token="start_time" depends="$hiden$">
+        <label>开始时间</label>
+        <default>2022-01-01 00:00:00</default>
+        <initialValue>2022-01-01 00:00:00</initialValue>
+      </input>
+      <input type="text" token="end_time">
+        <label>结束时间</label>
+        <default>*</default>
+      </input>
+      <input type="dropdown" token="task_type" depends="$hiden$">
+        <label>任务属性</label>
+        <choice value="*">All</choice>
+        <choice value="安全事件">安全事件</choice>
+        <choice value="定期任务">定期任务</choice>
+        <choice value="指标任务">指标任务</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="taskfirsttype" depends="$hiden$">
+        <label>taskfirsttype</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="typelabel" depends="$hiden$">
+        <label>typelabel</label>
+      </input>
+      <input type="dropdown" token="task_firsttype">
+        <label>任务类型</label>
+        <choice value="*">All</choice>
+        <choice value="资产管理">资产管理</choice>
+        <choice value="风险识别">风险识别</choice>
+        <choice value="日常运行">日常运行</choice>
+        <choice value="应急响应">应急响应</choice>
+        <choice value="合规基线">合规基线</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="task_level">
+        <label>任务等级</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>level</fieldForLabel>
+        <fieldForValue>level</fieldForValue>
+        <search>
+          <query>| `getslalist`
+| dedup level</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="task_role" depends="$hiden$">
+        <label>初始角色</label>
+        <choice value="*">All</choice>
+        <choice value="一线">一线</choice>
+        <choice value="二线">二线</choice>
+        <choice value="三线">三线</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="task_owner" depends="$hiden$">
+        <label>指派处理人</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="task_id" depends="$hide$">
+        <label>任务ID</label>
+      </input>
+      <input type="text" token="changecount" depends="$hide$">
+        <label>changecount</label>
+        <default>0</default>
+        <initialValue>0</initialValue>
+      </input>
+      <input type="text" token="task_target">
+        <label>任务对象</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="task_name2">
+        <label>任务名称</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="department">
+        <label>所在部门</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="business" depends="$hiden$">
+        <label>所属业务</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="zone" depends="$hiden$">
+        <label>负责区域</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="task_table">
+        <search>
+          <query>|tmsapi "查询任务清单" "$start_time$" "$end_time$" 
+| search name="$task_name2$"
+| fillnull value="" id name task_owner description cycle zone business department task_role cron task_firsttype task_target soar_status soar_workflow task_secondtype
+| search task_type="$task_type$" task_firsttype="$task_firsttype$" level="$task_level$" zone="$zone$" business="$business$" department="$department$" task_role="$task_role$" task_target="$task_target$" | eval 操作=id+"|"+name+"|"+description+"|"+cycle+"|"+cron+"|"+level+"|"+zone+"|"+business+"|"+department+"|"+task_role+"|"+task_owner+"|"+create_user+"|"+task_type+"|"+task_firsttype+"|"+status+"|"+can_delete+"|"+task_target+"|"+soar_status+"|"+soar_workflow+"|"+task_secondtype
+| table id task_type task_firsttype name task_target cycle level zone business department task_role task_owner create_time update_time 操作
+| rename task_firsttype as 任务类型 name as 任务名称 task_type as 任务属性 cycle as 任务周期 task_role as 初始角色 task_owner as 指派处理人 level as 任务等级 zone as 负责区域 business as 所属业务 department as 组织名称 task_target as 任务对象 create_time as 创建时间 update_time as 更新时间
+| eval changecount=$changecount$
+| fields - changecount|sort - id|eval tag=1
+| append 
+    [| makeresults 
+    | eval 操作=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="count">30</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="wrap">false</option>
+      </table>
+      <html>
+        
+          <style>
+
+
+	</style>
+        
+
+        <div class="alertOutBg">
+          <div class="alertOut">
+            <div style="text-align: center;margin-top:50px;">
+              <i class="fa fa-spinner fa-spin"/>正在保存</div>
+            </div>
+            <div class="modal-footer">	       
+            <a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">取消</a>
+          </div>
+        </div>
+        <div class="deleteOutBg">
+          <div class="deleteOut">
+            <div style="text-align: center;margin-top:50px;font-size:large;">
+              <i class="fa fa-spinner fa-spin"/>确定删除该条任务吗？</div>
+              <div class="modal-footer">	       
+            <a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">取消</a>
+            <a href="#" class="btn btn-primary btn-horizon modal-btn-primary pull-right" id="taskdelete" style="padding: 6px 15px;     font-weight: 500;     border: none;">确定</a> 
+          </div>
+            </div>
+            
+        </div>
+  <div class="popOutBg"/>
+  <div class="popOut"> 
+    <div class="modal-header"> 
+      <span title="关闭" class="close"> x </span> 
+      <h3 class="modal-title">配置编辑</h3> 
+    </div> 
+    <div class="slide-area" style="height:450px;"> 
+      <div class="content-wrapper query-dialog-wrapper"> 
+        <div class="modal-body modal-body-scrolling" style="height:420px;"> 
+          <div id="tablelcc"> 
+          </div> 
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 任务名称 </label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-name"> 
+        <span tabindex="0" class="input-label"/>
+        </div>
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-name2" style="margin-left: 0px;"> 
+        <input id="control-task-name3" name="control-task-endtime-inp"/>
+        </div>
+        </div>
+        <div class="help-alert-taskname help-alert-all" style="color:red">     请输入任务名称 </div>
+        </div>
+        
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 任务属性 </label> 
+        <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-task-type" menu-name="topsek-type-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-task-type" value-key="任务类型" value-key-en="task_type" is_necessary="true" value-default="--请选择任务属性--">--请选择任务属性--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-type-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+				<div class="help-alert-type help-alert-all" style="color:red">     请输入任务属性 </div>
+        </div>
+        
+         <div class="control-group shared-controls-controlgroup control-group-default " id="firsttype" style="display:none"> 
+        <label class="control-label"> 任务类型 </label> 
+        <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-task-firsttype" menu-name="topsek-firsttype-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-task-firsttype" value-key="任务类型" value-key-en="task_firsttype" is_necessary="true" value-default="--请选择任务类型--">--请选择任务类型--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-firsttype-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+				<div class="help-alert-type help-alert-all" style="color:red">     请输入任务类型 </div>
+        </div>
+        
+        <div class="control-group shared-controls-controlgroup control-group-default " id="secondtype" style="display:none"> 
+        <label class="control-label"> 指标类型 </label> 
+        <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-task-secondtype" menu-name="topsek-secondtype-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-task-secondtype" value-key="指标类型" value-key-en="task_secondtype" is_necessary="true" value-default="--请选择指标类型--">--请选择指标类型--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-secondtype-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+				<div class="help-alert-type help-alert-all" style="color:red">     请输入指标类型 </div>
+        </div>
+        
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 任务对象 </label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-target2"> 
+        <input id="control-task-target" name="control-task-target-inp"/>
+        </div>
+        </div>
+        </div>
+        
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 任务描述 </label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-description"> 
+        <textarea type="text" class="messagearea" aria-label="消息" placeholder="默认" style="margin: 0px; width: 100%; height: 100px;"/>
+        </div>
+        </div>
+        </div>
+        
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 计划 </label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-cycle"> 
+        <a class="dropdown-toggle btn" href="#" aria-label="计划: --请选择任务周期--"> <i class=" icon-large"/> <span class="link-label"> --请选择任务周期--</span>
+        <span class="caret"/> </a> 
+        <div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="timezhouqi"> 
+        <div class="arrow"/> 
+        <ul class="dropdown-menu-main"> 
+        <li>
+        <a class="synthetic-select " href="#" data-item-idx="0" data-item-value="hourly" aria-label="计划 : 每小时运行 : ">
+        <i class="icon-check" style="display:none"/>
+        <span class="link-label">立即</span>
+        </a>
+        </li> 
+        <li>
+        <a class="synthetic-select " href="#" data-item-idx="1" data-item-value="daily" aria-label="计划 : 每天运行 : ">
+        <i class="icon-check" style="display:none"/>
+        <span class="link-label">每天运行</span>
+        </a>
+        </li> 
+        <li>
+        <a class="synthetic-select " href="#" data-item-idx="2" data-item-value="weekly" aria-label="计划 : 每周运行 : ">
+        <i class="icon-check" style="display:none"/>
+        <span class="link-label">每周运行</span>
+        </a>
+        </li> 
+        <li>
+        <a class="synthetic-select " href="#" data-item-idx="3" data-item-value="monthly" aria-label="计划 : 每月运行 : ">
+        <i class="icon-check" style="display:none"/>
+        <span class="link-label">每月运行</span>
+        </a>
+        </li> 
+        <li>
+        <a class="synthetic-select " href="#" data-item-idx="4" data-item-value="custom" aria-label="计划 : 按 Cron 计划运行 : ">
+        <i class="icon-check" style="display: none;"/>
+        <span class="link-label">按 Cron 计划运行</span>
+        </a>
+        </li> 
+        </ul> 
+        </div> 
+        </div> 
+        </div> 
+        <div class="help-alert-cycle help-alert-all" style="color:red">     请输入任务周期 </div>
+        </div> 
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <div class="custom_time" style="display:none">
+        
+        </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 任务等级 </label> 
+        <!--<div class="controls controls-join "> -->
+        <!--<div class="control btn-group shared-controls-syntheticselectcontrol control-default" > -->
+        <!--<input id="control-task-level-inp"  placeholder="P5"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-task-level" menu-name="topsek-level-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-task-level" value-key="任务等级" value-key-en="level" is_necessary="true" value-default="--请选择任务等级--">--请选择任务等级--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-level-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+				<div class="help-alert-level help-alert-all" style="color:red">     请输入任务等级 </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 负责区域</label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-zone"> 
+        <input id="control-task-zone-inp" name="control-task-zone-inp"/>
+        </div>
+        </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 所属业务</label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-business"> 
+        <input id="control-task-business-inp" name="control-task-business-inp"/>
+        </div>
+        </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 组织名称</label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-department"> 
+        <input id="control-task-department-inp" name="control-task-department-inp"/>
+        </div>
+        </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 初始角色 </label> 
+        
+        <!--<div class="controls controls-join "> -->
+        <!--<div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-role"> -->
+        <!--<input id="control-task-role-inp" name="control-task-role-inp"/>-->
+        <!--</div>-->
+        <!--</div>-->
+        
+        <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-task-role" menu-name="topsek-role-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-task-role-inp" value-key="初始角色" value-key-en="role" is_necessary="true" value-default="--请选择初始角色--">--请选择初始角色--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-role-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+        <div class="help-alert-role help-alert-all" style="color:red">     请输入任务创建后的初始角色 </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+        <label class="control-label"> 负责人 </label> 
+        <div class="controls controls-join "> 
+        <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-task-owner"> 
+          <input id="control-task-owner-inp" name="control-task-owner-inp"/>
+        </div>
+        </div>
+        
+        </div>
+        <legend/>
+        <h2>SOAR联动</h2>
+        <div class="control-group shared-controls-controlgroup control-group-default "> 
+          <label class="control-label"> 联动状态 </label> 
+          <div class="controls controls-join "> 
+          <div class="control btn-group shared-controls-syntheticselectcontrol control-default" id="control-soar-status" style="font-size: unset;"> 
+            <input type="radio" value-key="联动状态" class="inp control-soar-status-inp" name="control-soar-status-inp" value="1" style="margin: 0px;margin-top: -4px;"> 启用 </input>
+            <input type="radio" value-key="联动状态" class="inp control-soar-status-inp" name="control-soar-status-inp" value="0" checked="checked" style="margin: 0px;margin-top: -4px;"> 禁用 </input>
+          </div>
+          </div>
+        </div>
+        <div class="control-group shared-controls-controlgroup control-group-default " id="soar-workflow-div" style="display:none"> 
+          <label class="control-label"> 流程选择 </label> 
+          <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" id="control-soar-workflow" menu-name="topsek-workflow-menu">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" name="control-soar-workflow" value-key="流程选择" value-key-en="soar_workflow" is_necessary="true" value-default="--请选择流程--">--请选择流程--</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-workflow-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+        </div>
+      </div> 
+      <div class="dropdown-footer"/> 
+      </div> 
+
+      
+    </div> 
+    <div class="modal-footer"> 
+      <a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">取消</a> 
+      <a href="#" class="btn btn-primary btn-horizon  modal-btn-primary pull-right" id="marcossave" style="padding: 6px 15px;     font-weight: 500;     border: none;">应用</a> 
+      <a href="#" class="btn btn-primary btn-horizon modal-btn-primary pull-right" id="taskadd" style="padding: 6px 15px;     font-weight: 500;     border: none; ">应用</a> 
+    </div> 
+  </div>
+      </html>
+    </panel>
+  </row>
+</form>

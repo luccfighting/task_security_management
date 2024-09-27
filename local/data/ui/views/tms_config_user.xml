@@ -1,0 +1,181 @@
+<form script="tms_config_user.js" stylesheet="./css/tms_config_user.css">
+  <label>人员配置</label>
+  <search>
+    <query>|makeresults|eval role="一线|二线|三线"</query>
+    <preview>
+      <condition>
+        <set token="rolename">$result.role$</set>
+      </condition>
+    </preview>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+      <div style="text-align:right;margin: 5px 10px 0px 0px;">
+        <!--<button type="button" class="btn btn-primary btn-topsek " style="float:left;">编辑</button> -->
+        <button type="button" class="btn btn-primary btn-horizon btn-topsek-addnewuser">新增</button>
+        <div class="ce_tree_icons" style="float:right;margin-left: 5px;">
+      <!--<button title="" class="ce_upload_file btn btn-primary one" defaultcsv="task_user_demo.csv" data-original-title="Upload a file">批量编辑</button>-->
+          </div>
+        <!--<button type="button" class="btn cancel btn-secondary btn-topsek_bussinesslookup">批量修改</button>-->
+      </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="dropdown" token="table_role">
+        <label>角色</label>
+        <choice value="*">All</choice>
+        <choice value="一线">一线</choice>
+        <choice value="二线">二线</choice>
+        <choice value="三线">三线</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="changecount" depends="$hiden$">
+        <label>field1</label>
+        <default>0</default>
+      </input>
+      <input type="text" token="account">
+        <label>用户账号</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="task_user_table">
+        <search>
+          <query>| tmsapi "获取用户清单"|search account="$account$" role="$table_role$" |fillnull value="" account name zone business department role email mobile |eval detail=account+"|"+name+"|"+task_role+"|"+email+"|"+mobile+"|"+zone
+| eval 操作=if(id=1,0," id='"+id+"'#tpsplit#"+detail)
+| table id account name zone  task_role create_time update_time email mobile  操作 
+
+| rename account as 用户账号 name as 用户名称 zone as 负责区域 business as 业务 department as 部门 task_role as 角色 email as 邮箱 mobile as 手机号 create_time as 创建时间 update_time as 更新时间 
+| eventstats count 
+| eval tasktag=1 
+| append 
+    [| makeresults 
+    | eval _time=0 
+    | eval count="0",操作=0 
+    | eval tasktag=0] 
+| eventstats count as count2 
+| search count2=1 OR tasktag=1 
+| fields - count count2 tasktag _time 
+| eval changecount=$changecount$ 
+| fields - changecount</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <div class="popOutBg"/>
+	<div class="popOut"> 
+   <div class="modal-header"> 
+    <span title="关闭" class="close"> x </span> 
+    <h3 class="modal-title">人员配置</h3> 
+   </div> 
+	<div class="content-wrapper query-dialog-wrapper">
+		<div class="modal-body modal-body-scrolling" style="height:auto;">
+			<div id="user_config_table" style="text-align:centor;">
+				<table border="0" style="margin:0;">
+					<tbody id="user_config_tbody">
+						<tr>
+							<td height="30px" width="100px">
+								用户账号
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp task-topsek-value uneditable-input" value-key="账号" value-key-en="account" is_necessary="true" style="margin: auto;" value="" placeholder="请输入账号"/>
+							
+							</td>
+							<td>	<div class="help-alert-account help-alert-all" style="color:red"> 必填项 </div>
+                      </td>
+							</tr>
+						  <tr>
+							<td height="30px" width="100px">
+								用户名称
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp task-topsek-value" value-key="用户名称" value-key-en="name" style="margin: auto;" value="" placeholder="请输入用户名称"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								角色
+							</td>
+							<td height="30px" width="250px">
+							  <div class="controls controls-join ">
+									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" menu-name="topsek-rolename-menu" style="padding: 2px 4px;width: 260px;">
+										<a class="dropdown-toggle btn" href="#">
+											<i class=" icon-large"/>
+											<span class="link-label task-topsek-value" value-key="角色" value-key-en="task_role" is_necessary="true" value-default="--请选择角色--">
+											</span>
+											<span class="caret"/>
+										</a>
+										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-rolename-menu" style="margin: 8px 0 0 -143px;">
+											<div class="arrow"/>
+											<ul class="dropdown-menu-main">
+											 
+											</ul>
+										</div>
+									</div>
+								</div>
+								
+							</td>
+							<td>	<div class="help-alert-role help-alert-all" style="color:red"> 必填项 </div>
+                      </td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								电子邮箱
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp task-topsek-value" value-key="电子邮箱" value-key-en="email" style="margin: auto;" is_necessary="true" value="" placeholder="请输入电子邮箱"/>
+							</td>
+								<td>	<div class="help-alert-email help-alert-all" style="color:red"> 必填项 </div>
+                      </td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								手机号
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp task-topsek-value" value-key="手机号" value-key-en="mobile" style="margin: auto;" value="" placeholder="请输入手机号"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								负责区域
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp task-topsek-value" value-key="区域" value-key-en="zone" style="margin: auto;" value="" placeholder="请输入负责区域"/>
+							</td>
+						</tr>
+					 <!-- <tr style="display:none">-->
+  				<!--    <td height="30px" width="100px">-->
+  				<!--				创建人-->
+  				<!--		</td>-->
+  				<!--		<td height="30px" width="250px">-->
+  				<!--				<input type="text" class="inp task-topsek-value" value-key="create_user" value-key-en="create_user" is_default="true" style="margin: auto;" value="$env:user$" placeholder=""/>-->
+  				<!--		</td>-->
+						<!--</tr>-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	  <a href="#" class="btn cancel btn-secondary btn-cancel" data-dismiss="modal">取消</a>
+		<a href="#" class="btn btn-primary btn-horizon modal-btn-primary pull-right btn-addnewuser" style="padding: 6px 15px;     font-weight: 500;     border: none; ">
+			增加
+		</a>
+		<a href="#" class="btn btn-primary btn-horizon modal-btn-primary pull-right btn-changeuser" style="padding: 6px 15px;     font-weight: 500;     border: none; ">
+			修改
+		</a>
+	</div>
+  </div>
+      </html>
+    </panel>
+  </row>
+</form>

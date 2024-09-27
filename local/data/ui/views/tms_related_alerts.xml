@@ -1,0 +1,30 @@
+<dashboard script="tms_related_alerts.js" stylesheet="./css/tms_related_alerts.css">
+  <label>相关告警</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| topsekess `es-con` index="alerting_notice_total" action="search" 
+    [| tmsapi "获取任务明细" "$taskid$" 
+    | eval query="eventb_uuid:"+event_id 
+    | return query] 
+| eval fire_time=strftime(fire_time/1000,"%F %T") 
+| rename fire_time as 告警时间 alert_name as 告警名称 threat_level as 威胁等级 alert_level as 告警级别 src_ip as 攻击源IP/端口 dst_ip as 目的IP/端口 threat_category as 威胁类型 alert_count as 告警次数 product as 告警来源 status as 处理状态 
+| table 告警时间 告警名称 告警级别 攻击源IP/端口 目的IP/端口 威胁等级 威胁类型 告警次数 告警来源 
+| eval tag=1 
+| append 
+    [| makeresults 
+    | eval 告警名称="" 
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1 
+| fields - count2 _time tag</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

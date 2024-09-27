@@ -1,0 +1,185 @@
+<form script="tabs.js,./js/tms_mytask_for_mss2.js,tms_general.js" stylesheet="./css/font-awesome.min.css,tabs.css,./css/tms_mytask_for_mss2.css,./css/tms_general.css">
+  <label>我的工单</label>
+  <init>
+    <set token="form.org_name"></set>
+  </init>
+  <fieldset submitButton="false"></fieldset>
+  <row depends="$hide$">
+    <panel>
+      <input type="link" token="data_mem_type" id="data_mem_type_link">
+        <label></label>
+        <choice value="我的任务">我的任务</choice>
+        <default>我的任务</default>
+        <initialValue>我的任务</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row id="tenants_row">
+    <panel>
+      <html>
+      <div id="left_mode">
+        <div class="list_title">租户列表</div>
+        <ul>
+          <li name="*" class="all_tenant active">全部</li>
+          <ul class="tenant_list">
+            加载中 <i class="fa fa-spinner fa-spin"/>
+          </ul>
+        </ul>
+      </div>
+    </html>
+    </panel>
+  </row>
+  <row id="stats_row">
+    <panel id="stats_panel1">
+      <title>平台运维</title>
+    </panel>
+    <panel id="stats_panel2">
+      <title>安全事件</title>
+    </panel>
+    <panel id="stats_panel3">
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="icon_img task_gmsq" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="购买申请">0</a>
+                <p/>
+                购买申请
+              </div>
+            </div>
+            
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel id="stats_panel4">
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="icon_img task_shwt" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="售后问题">0</a>
+                <p/>
+                售后问题
+              </div>
+            </div>
+            
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel id="stats_panel5">
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="icon_img task_ypcz" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="研判处置">0</a>
+                <p/>
+                研判处置
+              </div>
+            </div>
+           
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel id="stats_panel6">
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="icon_img task_fxcz" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="风险处置">0</a>
+                <p/>
+                风险处置
+              </div>
+            </div>
+           </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row id="zjld_row">
+    <panel>
+      <html>
+        <!--<a id="zjld_export" style="    float: right;     position: absolute;     margin-top: -112px;     margin-left: 100%;     left: -85px;">前往导出&gt;&gt;</a>-->
+        <style>
+          #stats_panel1,#stats_panel2{
+           width:50% !important;
+          }
+          #stats_panel2 .dashboard-panel{
+           margin: 0 0 5px 0 !important;
+          }
+          #stats_panel3,#stats_panel4,#stats_panel5,#stats_panel6{
+           width:25% !important;
+          }
+        </style>
+        <div id="zjld_btn_div"/>
+      </html>
+    </panel>
+  </row>
+  <row id="asm_vulner_overview_row">
+    <panel id="asm_vulner_overview_panel">
+      <input type="text" token="org_name" depends="$hide$">
+        <label>租户</label>
+      </input>
+      <input type="text" token="name" id="dev_ip_input">
+        <label>名称</label>
+      </input>
+      <input type="text" token="task_type" id="dev_name_input">
+        <label>任务属性</label>
+      </input>
+      <input type="text" token="task_secondtype">
+        <label>任务类型</label>
+      </input>
+      <input type="text" token="level" id="dev_mac_input">
+        <label>级别</label>
+      </input>
+      <input type="text" token="create_user" id="vlan_input">
+        <label>创建人</label>
+      </input>
+      <input type="dropdown" token="role">
+        <label>负责组</label>
+        <choice value="">All</choice>
+        <choice value="一线">一线</choice>
+        <choice value="二线">二线</choice>
+        <choice value="三线">三线</choice>
+        <default></default>
+      </input>
+      <input type="text" token="user_name">
+        <label>负责人</label>
+      </input>
+      <input type="dropdown" token="status">
+        <label>状态</label>
+        <choice value="">All</choice>
+        <choice value="未认领">未认领</choice>
+        <choice value="已认领">已认领</choice>
+        <choice value="处理中">处理中</choice>
+        <choice value="未通过">未通过</choice>
+        <choice value="已完成">已完成</choice>
+        <default></default>
+      </input>
+      <html>
+        <div class="zjld_filter_label" style="margin-left: 12px;"/>
+        <div id="return_div" style="display:none">
+            <a class="btn-topsek-config" data-value="return" conf_id="">返回</a>
+          </div>
+         <div id="table_div"/>
+        <div id="table_tfoot_div" style="float: right;"/>
+    </html>
+    </panel>
+  </row>
+</form>

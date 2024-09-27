@@ -1,0 +1,322 @@
+<form script="./js/tms_task_portrait.js" stylesheet="./css/font-awesome.min.css,./css/tms_task_portrait.css">
+  <label>任务画像</label>
+  <fieldset submitButton="false"></fieldset>
+  <row depends="$hide$">
+    <panel>
+      <input type="text" token="task_id">
+        <label>任务ID</label>
+        <default>无效任务</default>
+        <initialValue>无效任务</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+                <table style="width:100%">
+                    <tr>
+                        <td style="width:5%;font-size: 18px;color:gray;padding-left: 10px;">名称：</td>
+                        <td style="width:25%;font-size: 18px;">
+                            <span class="span-api-info" data-type="task_info" data-value="name"/>
+                        </td>
+                        <td style="width:5%;color:gray;padding-left: 10px;"></td>
+                        <td style="width:25%;">
+                            <a class="btn btn-horizon btn-topsek-disposal" data-value="工单处置" rule_id="" style="float: right; margin-right: 1%; display: block;">处置</a>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </html>
+    </panel>
+  </row>
+  <row id="menu_row">
+    <panel id="risk_stats">
+      <html>
+                <div>
+                    <div style="display: inline-block;">
+                        <h2 id="h2title">
+                            <i class="fa fa-list fa-fw"/>配置信息</h2>
+                    </div>
+                </div>
+                <hr id="hr1"/>
+                <table style="width:100%">
+                    <tr>
+                        <td class="menu_td_label">配置名称：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">任务属性：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_type"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">任务类型：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_firsttype"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">指标类型：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_secondtype"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">任务对象：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_target"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">初始等级：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="level"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">负责区域：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="zone"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">所属业务：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="business"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">所在部门：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="department"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">初始角色：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_role"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="menu_td_label">负责人：</td>
+                        <td class="menu_td_value">
+                            <span class="span-api-info" data-type="task_config" data-value="task_owner"/>
+                        </td>
+                    </tr>
+                </table>
+                <hr id="hr1"/>
+                <div>
+                    <div style="display: inline-block;">
+                        <h2 id="h2title">
+                            <i class="fa fa-list fa-fw"/>联系人</h2>
+                    </div>
+                </div>
+                <hr id="hr1"/>
+                <table style="width:100%" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <td class="menu_td_title">账号</td>
+                        <td class="menu_td_title">操作</td>
+                      </tr>
+                    </thead>
+                    <tbody class="contact_tbody"></tbody>
+                </table>
+                <hr id="hr1"/>
+                <div>
+                    <div style="display: inline-block;">
+                        <h2 id="h2title">
+                            <i class="fa fa-list fa-fw"/>相关设备</h2>
+                    </div>
+                </div>
+                <hr id="hr1"/>
+                <table style="width:100%" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <td class="menu_td_title">IP地址</td>
+                        <td class="menu_td_title">操作</td>
+                      </tr>
+                    </thead>
+                    <tbody class="device_tbody"></tbody>
+                </table>
+                <hr id="hr1"/>
+                <div>
+                    <div style="display: inline-block;">
+                        <h2 id="h2title">
+                            <i class="fa fa-list fa-fw"/>相关告警</h2>
+                    </div>
+                </div>
+                <hr id="hr1"/>
+                <table style="width:100%" class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <td class="menu_td_title">告警名称</td>
+                        <td class="menu_td_title">操作</td>
+                      </tr>
+                    </thead>
+                    <tbody  class="alert_tbody"></tbody>
+                </table>
+            </html>
+    </panel>
+    <panel id="laye_title">
+      <html>
+                <div style="display: inline-block;">
+                    <h2 id="h2title">
+                        <i class="fa fa-list fa-fw"/>
+                        <span class="span-title" data-value="menu">任务画像</span>
+                    </h2>
+                </div>
+                <hr id="hr1"/>
+            </html>
+    </panel>
+    <panel id="laye_info">
+      <!--<input type="text" token="dev_ip" id="inp_dev_ip">-->
+      <!--    <label>IP资产</label>-->
+      <!--    <default></default>-->
+      <!--    <initialValue></initialValue>-->
+      <!--</input>-->
+      <input type="text" token="domain" id="inp_domain">
+        <label>域名</label>
+        <default></default>
+        <initialValue></initialValue>
+      </input>
+      <input type="text" token="port" id="inp_port">
+        <label>端口</label>
+        <default></default>
+        <initialValue></initialValue>
+      </input>
+      <input type="text" token="service" id="inp_service">
+        <label>服务</label>
+        <default></default>
+        <initialValue></initialValue>
+      </input>
+      <input type="dropdown" token="weak_class" id="inp_weak_class">
+        <label>弱点类别</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="event_level" id="inp_event_level">
+        <label>风险级别</label>
+        <choice value="*">All</choice>
+        <choice value="严重">严重</choice>
+        <choice value="高">高危</choice>
+        <choice value="中">中危</choice>
+        <choice value="低">低危</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="vuln_name" id="inp_vuln_name">
+        <label>漏洞名称</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="domain_path" id="inp_domain_path">
+        <label>目录路径</label>
+        <default></default>
+        <initialValue></initialValue>
+      </input>
+      <input type="dropdown" token="is_sensitive" id="inp_is_sensitive">
+        <label>风险级别</label>
+        <choice value="">All</choice>
+        <choice value="true">高</choice>
+        <choice value="false">低</choice>
+        <default></default>
+        <initialValue></initialValue>
+      </input>
+      <html>
+                <div id="org_portrait_stats_div"/>
+                <div id="zjld_btn_div"/>
+                <div id="table_div"/>
+                <div id="table_tfoot_div" style="float: right;"/>
+                <div class="popOutBg"/>
+            </html>
+    </panel>
+  </row>
+  <row id="layered_row">
+    <panel>
+      <html>
+                <div data-description="基础信息">
+              
+                    <div style="display: inline-block;width: 100%;">
+                        <h2 id="h2title">
+                            <i class="fa fa-list fa-fw"/>基础信息</h2>
+                    </div>
+                    <hr id="hr1"/>
+                    <div class="business_detail_div" data-value="基础信息">
+                        <table style="width:100%" class="unbot_table table">
+                            <tr>
+                                <td id="td1">
+                                    <i class="fa fa-indent fa-fw"/>任务等级：</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="level"/>
+                                </td>
+                                <td id="td1">
+                                    <i class="fa fa-user fa-fw"/>任务负责人：</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="user_name"/>
+                                </td>
+                                <td id="td1">
+                                  <i class="fa fa-indent fa-fw"/>任务状态</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="status"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="td1">
+                                    <i class="fa fa-calendar fa-fw"/>创建时间：</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="create_time"/>
+                                </td>
+                                <td id="td1">
+                                    <i class="fa fa-calendar fa-fw"/>更新时间：</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="update_time"/>
+                                </td>
+                                <td id="td1">
+                                  <i class="fa fa-indent fa-fw"/>相关文件</td>
+                                <td id="td2">
+                                  <span class="span-api-info" data-type="task_info" data-value="file_count"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="td1">
+                                    <i class="fa fa-indent fa-fw"/>任务描述：</td>
+                                <td id="td2" colspan="5">
+                                  <span class="span-api-info" data-type="task_info" data-value="description"/>
+                                </td>
+                                
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="text-align:center;cursor: pointer;">
+                        <i class="fa fa-angle-down" data-value="基础信息" aria-hidden="true"/>
+                    </div>
+                    <div style="text-align:center;cursor: pointer;">
+                        <i class="fa fa-angle-up" data-value="基础信息" aria-hidden="true"/>
+                    </div>
+                </div>
+                <hr id="hr1"/>
+                <div data-description="处置信息">
+                    <div>
+                        <div style="display: inline-block;">
+                            <h2 id="h2title">
+                                <i class="fa fa-list fa-fw"/>处置信息</h2>
+                        </div>
+                    </div>
+                    <hr id="hr1"/>
+                    <div class="business_detail_div" data-value="处置信息">
+                        <div class="timeline-small-body" style="overflow: auto;padding: 2rem;    height: 37rem;">
+                        <ul id="lifecycle_timeline_str2" viz-value="lifecycle_timeline_str2" style="">
+                        
+                        </ul>
+                    </div>
+                    </div>
+                </div>
+            </html>
+    </panel>
+  </row>
+</form>

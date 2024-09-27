@@ -1,0 +1,127 @@
+  .dashboard-body {
+    padding: 0 !important;
+    }
+ .dashboard-header {
+    margin-bottom: 0px  !important;
+    padding-top: 0px  !important;
+    min-height: 0px  !important;
+}
+
+*{ margin:0; padding:0;}
+.popOutBg{ width:100%; height:100%; position: fixed; left:0; top:0; background:rgba(0,0,0,.6); z-index:1;display: none;}
+.popOut{ position:fixed;    
+height: auto;
+    /* top: 15%; */
+    top: 6em;
+    width: 60%;
+    left: 60%; 
+    margin-top: -50px;
+    margin-left: -40%;
+     background:#fff; border-radius:8px; overflow: hidden; display: none;z-index:2;}
+.alertOutBg{ width:100%; height:100%; position: fixed; left:0; top:0; background:rgba(0,0,0,.6); z-index:1; display: none;}
+.alertOut{ position:fixed; width:200px; height:150px; top:30%; left:50%; margin-top:-200px; margin-left:-100px; background:#fff; border-radius:8px; overflow: hidden; display: none;z-index:2;}
+.deleteOutBg{ width:100%; height:100%; position: fixed; left:0; top:0; background:rgba(0,0,0,.6); z-index:1; display: none;}
+.deleteOut{ position:fixed; width:420px; height:150px; top:30%; left:50%; margin-top:-200px; margin-left:-200px; background:#fff; border-radius:8px; overflow: hidden; display: none;z-index:2;}
+.popOut table{ display: block;  margin:42px auto 0; width:520px;}
+.popOut caption{ width:520px; text-align: center; color:#f40; font-size:18px; line-height:42px;}
+.popOut table tr td{ color:#666; padding:6px; font-size:14px;}
+.popOut table tr td:first-child{ text-align: right;}
+@keyframes ani{
+    from{
+        transform:translateX(-100%) rotate(-60deg) scale(.5);
+    }
+    50%{
+        transform:translateX(0) rotate(0) scale(1);
+    }
+    90%{
+        transform:translateX(20px) rotate(0) scale(.8);
+    }
+    to{
+        transform:translateX(0) rotate(0) scale(1);
+    }
+}
+.ani{ animation:ani .5s ease-in-out;}
+        .view-mode .element-footer {
+border-bottom: 1px solid transparent;
+display: none;
+}
+.control-label {
+ float: left;
+ width: 160px;
+ padding-top: 5px;
+ text-align: right;
+}
+.control-group {
+    width: 440px;
+    margin-bottom: 10px;
+}
+.controls-join{
+    margin-left: 180px;
+}
+.controls{
+    margin-left: 180px;
+}
+input{
+    background-color: #fff;
+    border: 1px solid #c3cbd4;
+    transition: border .2s,box-shadow .2s;
+    padding: 5px 8px;
+    height: 32px;
+    line-height: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+    color: #5c6773;
+    border-radius: 3px;
+    -webkit-writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: start;
+    appearance: auto;
+    }
+.dropdown-menu {
+    margin:8px 0 15px -140px;
+}
+.help-block {
+    position: absolute;
+    top: 4px;
+    left: 100%;
+    margin-left: 10px;
+    margin-top: 0!important;
+    width: 280px;
+}
+.help-alert-taskname,.help-alert-role,.help-alert-cycle,.help-alert-level,.help-alert-type {
+    position: absolute;
+    top: 4px;
+    left: 100%;
+    margin-left: 10px;
+    margin-top: 0!important;
+    width: 280px;
+    display: none;
+    padding: 5px 0px;
+}
+
+#task_table table th{
+    text-align: left;
+}
+
+#task_table table th[data-sort-key="任务周期"]{
+    width: 145px !important;
+}
+
+
+.btn-horizon:hover {
+    background-color: #297bd3;
+    border-color: #297bd3;
+    color: #fff;
+}
+
+.btn-horizon{
+    background-color: #2e89ea;
+    border-color: #2e89ea;
+    color: #fff;
+}
+

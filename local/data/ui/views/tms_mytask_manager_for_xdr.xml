@@ -1,0 +1,408 @@
+<form script="tabs.js,tms_mytask_manager.js" stylesheet="tabs.css,./css/tms_mytask_manager_for_asm.css">
+  <label>我的审核-安全事件</label>
+  <init>
+    <unset token="taskid"></unset>
+    <set token="form.iframe_url">tms_related_journal_manager</set>
+    <unset token="table_level"></unset>
+    <unset token="table_status"></unset>
+    <set token="useraction">0</set>
+    <set token="at_count">0</set>
+    <set token="at_count_0">0</set>
+    <set token="at_count_1">0</set>
+    <set token="aq_count">0</set>
+    <set token="aq_count_0">0</set>
+    <set token="aq_count_1">0</set>
+    <set token="dq_count">0</set>
+    <set token="dq_count_0">0</set>
+    <set token="dq_count_1">0</set>
+    <set token="yq_count">0</set>
+    <set token="yq_count_0">0</set>
+    <set token="yq_count_1">0</set>
+    <set token="sh_count">0</set>
+    <set token="sh_count_0">0</set>
+    <set token="sh_count_1">0</set>
+    <set token="form.task_status_type">!="未完成"</set>
+    <set token="form.task_status">!="已关闭"</set>
+  </init>
+  <search>
+    <preview>
+      <set token="userid">$result.id$</set>
+      <set token="role">$result.role$</set>
+      <set token="account">$result.account$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_user where account='$env:user$'" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task"
+| table id role account</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <search>
+    <query>|makeresults|eval level="P1|P2|P3|P4|P5",role="一线|二线|三线",status="未通过|已关闭"</query>
+    <preview>
+      <condition>
+        <set token="level">$result.level$</set>
+        <set token="detaillevel">$result.level$</set>
+        <set token="rolename">$result.role$</set>
+        <set token="detailrolename">$result.role$</set>
+        <set token="detailstatus">$result.status$</set>
+      </condition>
+    </preview>
+  </search>
+  <search>
+    <query>| tmsdbquery "select" "select * from task_user" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task"|search role="$role$"|stats values(account) as username|eval username=mvjoin(username,"|")</query>
+    <preview>
+      <condition>
+        <set token="username">$result.username$</set>
+        <set token="detailusername">$result.username$</set>
+      </condition>
+    </preview>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row depends="$hide$">
+    <panel>
+      <input type="text" token="task_status_type">
+        <label>控制任务显示</label>
+        <default>!="未完成"</default>
+        <initialValue>!="未完成"</initialValue>
+      </input>
+      <input type="text" token="task_status">
+        <label>控制显示的任务状态</label>
+        <default>!="已关闭"</default>
+        <initialValue>!="已关闭"</initialValue>
+      </input>
+      <input type="dropdown" token="iframe_url" depends="$hide$">
+        <label>iframe_url</label>
+        <choice value="tms_related_journal_manager">tms_related_journal_manager</choice>
+        <choice value="tms_related_contact_manager">tms_related_contact_manager</choice>
+        <choice value="tms_related_device_manager">tms_related_device_manager</choice>
+        <choice value="tms_related_alerts_manager">tms_related_alerts_manager</choice>
+        <choice value="tms_related_task_manager">tms_related_task_manager</choice>
+        <choice value="tms_related_file_manager">tms_related_file_manager</choice>
+        <choice value="tms_related_log_manager">tms_related_log_manager</choice>
+        <default>tms_related_journal_manager</default>
+        <initialValue>tms_related_journal_manager</initialValue>
+      </input>
+      <input type="text" token="role" depends="$hide$">
+        <label>role</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="task_search" depends="$hide$">
+        <label>task_search</label>
+      </input>
+      <input type="text" token="changecount" depends="$hiden$">
+        <label>field1</label>
+        <default>0</default>
+      </input>
+      <input type="text" token="taskid" depends="$hiden$">
+        <label>任务ID</label>
+      </input>
+      <input type="text" token="realhtml" depends="$hide$">
+        <label>realhtml</label>
+      </input>
+      <table>
+        <search>
+          <preview>
+            <set token="table_level">$result.level$</set>
+            <set token="table_name">$result.name$</set>
+            <set token="table_role">$result.role$</set>
+            <set token="table_username">$result.user_name$</set>
+            <set token="table_status">$result.status$</set>
+            <set token="table_resolution">$result.sla_time$</set>
+            <set token="table_color">$result.color$</set>
+            <set token="table_description">$result.description$</set>
+            <set token="form.taskid">$result.id$</set>
+            <eval token="useraction">$useraction$+1</eval>
+          </preview>
+          <query>| tmsdbquery "select" "select * from task_info where $task_search$" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task"
+| join type=left level 
+    [| tmsdbquery "select" "select response,response_send,resolution,resolution_send,level from task_sla" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task"]
+| eval sla=if(status="未认领",response,resolution)| eval sla_time=round((now()-strptime(create_time,"%F %T"))/(sla*60)*100,0)|eval sla_time=if(sla_time&gt;100,100,sla_time)|eval color=case(sla_time&lt;=33,"#53A051",sla_time&lt;=66 AND sla_time&gt;33,"#F1813F",sla_time&gt;66,"#DC4E41")|fillnull value="" description|fillnull value="--请选择负责人--" user_name</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <search>
+          <preview>
+            <set token="at_count">$result.待审核_任务数$</set>
+            <set token="at_count_0">$result.待审核_已完成$</set>
+            <set token="at_count_1">$result.待审核_未通过$</set>
+            <set token="aq_count">$result.安全事件_任务数$</set>
+            <set token="aq_count_0">$result.安全事件_已完成$</set>
+            <set token="aq_count_1">$result.安全事件_未通过$</set>
+            <set token="dq_count">$result.定期任务_任务数$</set>
+            <set token="dq_count_0">$result.定期任务_已完成$</set>
+            <set token="dq_count_1">$result.定期任务_未通过$</set>
+            <set token="sh_count">$result.已关闭_任务数$</set>
+            <set token="sh_count_0">$result.已关闭_安全事件$</set>
+            <set token="sh_count_1">$result.已关闭_定期任务$</set>
+            <set token="yq_count">$result.未完成_任务数$</set>
+            <set token="yq_count_0">$result.未完成_响应逾期$</set>
+            <set token="yq_count_1">$result.未完成_处理逾期$</set>
+          </preview>
+          <query>| tmsdbquery "select" "select * from task_info where task_type!='新增资产' AND task_type!='资产变更' AND task_type!='删除资产' AND task_type!='合规任务'" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task" 
+| eval task_status_type=case(status="已完成" OR status="未通过",task_type,status="已关闭","已关闭",1=1,"未完成") 
+| table * 
+| stats count by task_status_type status 
+| appendpipe 
+    [| stats sum(count) as count by task_status_type 
+    | eval status="任务数"] 
+| appendpipe 
+    [| search task_status_type!="已关闭" 
+    | stats sum(count) as count by status 
+    | eval task_status_type="待审核"] 
+| eval a="统计信息" 
+| eval type=task_status_type+"_"+status 
+| xyseries a type count 
+
+| append 
+    [ makeresults 
+    | eval a="统计信息" 
+    | table a 
+    | fillnull value="0" 待审核_任务数 待审核_已完成 待审核_未通过 安全事件_任务数 安全事件_已完成 安全事件_未通过 定期任务_任务数 定期任务_已完成 定期任务_未通过 已关闭_任务数 已关闭_安全事件 已关闭_定期任务 未完成_任务数 未完成_响应逾期 未完成_处理逾期] 
+| stats sum(*) by a 
+| rename sum(*) as *</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row id="task_row1">
+    <panel id="li_row">
+      <html>
+       
+      <ul class="task_ul">
+        <li class="task-li">
+          <span class="task_span" task_value="*">
+          <div class="task_span_choose" style="display:block"/>
+          <h1>待审核</h1>
+          <div>任务数：$at_count$</div>
+          <div>已完成：$at_count_0$</div>
+          <div>未通过：$at_count_1$</div>
+          </span>
+        </li>
+        <!--<li class="task-li">-->
+        <!--  <span class="task_span" task_value="新增资产">-->
+        <!--  <div class="task_span_choose"/>-->
+        <!--  <h1 style="font-weight:400;font-size: 16px;">新增资产</h1>-->
+        <!--  <div>任务数：$aq_count$</div>-->
+        <!--  <div>已完成：$aq_count_0$</div>-->
+        <!--  <div>未通过：$aq_count_1$</div>-->
+        <!--  </span>-->
+        <!--</li>-->
+        <!--<li class="task-li">-->
+        <!--  <span class="task_span" task_value="资产编辑">-->
+        <!--  <div class="task_span_choose"/>-->
+        <!--  <h1 style="font-weight:400;font-size: 16px;">资产编辑</h1>-->
+        <!--  <div>任务数：$dq_count$</div>-->
+        <!--  <div>已完成：$dq_count_0$</div>-->
+        <!--  <div>未通过：$dq_count_1$</div>-->
+        <!--  </span>-->
+        <!--</li>-->
+        <!--<li class="task-li">-->
+        <!--  <span class="task_span" task_value="删除资产">-->
+        <!--  <div class="task_span_choose"/>-->
+        <!--  <h1 style="font-weight:400;font-size: 16px;">删除资产</h1>-->
+        <!--  <div>任务数：$dq_count$</div>-->
+        <!--  <div>已完成：$dq_count_0$</div>-->
+        <!--  <div>未通过：$dq_count_1$</div>-->
+        <!--  </span>-->
+        <!--</li>-->
+        <li class="task-li" task_value="未完成">
+          
+          <span class="task_span" task_value="未完成">
+          <div class="task_span_choose"/>
+          <h1>未完成</h1>
+          <div>任务数：$yq_count$</div>
+          <div>响应逾期：$yq_count_0$</div>
+          <div>处理逾期：$yq_count_1$</div>
+          </span>
+        </li>
+        <li class="task-li" task_value="已关闭">
+          
+          <span class="task_span" task_value="已关闭">
+          <div class="task_span_choose"/>
+          <h1>已关闭</h1>
+          <div>任务数：$sh_count$</div>
+          <div>安全事件：$sh_count_0$</div>
+          <div>定期任务：$sh_count_1$</div>
+          </span>
+        </li>
+        
+      </ul>
+    </html>
+    </panel>
+  </row>
+  <row id="task_row2">
+    <panel>
+      <input type="text" token="filter_name">
+        <label>任务名称</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="task_table">
+        <search>
+          <query>| tmsdbquery "select" "select * from task_info where task_type!='新增资产' AND task_type!='资产变更' AND task_type!='删除资产' AND task_type!='合规任务'" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task" 
+| eval task_status_type=case(status="已完成" OR status="未通过",task_type,status="已关闭","已关闭",1=1,"未完成") 
+
+| eval 操作=" id='"+id+"'" |eval 操作=id
+| search name="$filter_name$" 
+| search task_status_type$task_status_type$ task_status_type$task_status$ 
+| join type=left level 
+    [| tmsdbquery "select" "select * from task_sla" "127.0.0.1" "3306" "root" "esc@t0pSek" "isoc_task"] 
+| eval sla=if(status="未认领",response,resolution) 
+| eval sla_time=round((now()-strptime(create_time,"%F %T"))/(sla*60)*100,0) 
+|eval sla_time=if(status="已完成" OR status="已关闭","-1",if(sla_time&gt;100,100,sla_time))
+| table name level create_user description user_name role status create_time 操作 sla_time 
+| rename name as 任务名称 level as 任务等级 create_user as 创建者 description as 任务描述 status as 任务状态 user_name as 负责人 role as 角色 create_time as 创建时间 sla_time as 超时进度 
+| eventstats count 
+| eval tasktag=1 
+| append 
+    [| makeresults 
+    | eval _time=0 
+    | eval count="0",操作=0 
+    | eval tasktag=0] 
+| eventstats count as count2 
+| search count2=1 OR tasktag=1 
+| fields - count count2 tasktag _time 
+| eval changecount=$changecount$ 
+| fields - changecount|sort - 创建时间</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row id="tms_mytask_row1">
+    <panel>
+      <html>
+              <div>
+          
+          <h2 style="font-size:30px;padding:10px" class="task-detail-value" value-key="任务名称" value-key-en="name">$table_name$</h2>
+          <!--<div style="min-height:38px">任务描述：$table_description$</div>-->
+          <legend/>
+          <div style="width: 90%;padding: 0 5%;">
+          <table width="100%">
+            <tr>
+              <td style="display:none"> <div class="controls controls-join ">
+  									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" menu-name="topsek-detaillevel-menu" style="padding: 2px 4px;width: 200px;">
+  										<a class="dropdown-toggle btn" href="#">
+  											<i class=" icon-large"/>
+  											<span class="link-label task-detail-value" value-key="任务等级" value-key-en="level" value-default="--请选择任务等级--">$table_level$
+  											</span>
+  											<span class="caret"/>
+  										</a>
+  										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-detaillevel-menu" style="margin: 8px 0px 0px -43px;position: fixed;z-index: 1060;top: auto;left: auto;">
+  											<div class="arrow"/>
+  											<ul class="dropdown-menu-main">
+  											 
+  											</ul>
+  										</div>
+  									</div>
+  								</div>
+              </td>
+              <td> <div class="controls controls-join ">
+  									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" menu-name="topsek-detailstatus-menu" style="padding: 2px 4px;width: 200px;">
+  										<a class="dropdown-toggle btn" href="#">
+  											<i class=" icon-large"/>
+  											<span class="link-label task-detail-value" value-key="任务状态" value-key-en="status" value-default="--请选择状态--">$table_status$
+  											</span>
+  											<span class="caret"/>
+  										</a>
+  										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-detailstatus-menu" style="margin: 8px 0px 0px -43px;position: fixed;z-index: 1060;top: auto;left: auto;">
+  											<div class="arrow"/>
+  											<ul class="dropdown-menu-main">
+  											 
+  											</ul>
+  										</div>
+  									</div>
+  								</div>
+              </td>
+              <td> <div class="controls controls-join ">
+  									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" menu-name="topsek-detailrolename-menu" style="padding: 2px 4px;width: 200px;">
+  										<a class="dropdown-toggle btn" href="#">
+  											<i class=" icon-large"/>
+  											<span class="link-label task-detail-value" value-key="用户组" value-key-en="role" value-default="--请选择用户组--">$table_role$
+  											</span>
+  											<span class="caret"/>
+  										</a>
+  										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-detailrolename-menu" style="margin: 8px 0px 0px -43px;position: fixed;z-index: 1060;top: auto;left: auto;">
+  											<div class="arrow"/>
+  											<ul class="dropdown-menu-main">
+  											 
+  											</ul>
+  										</div>
+  									</div>
+  								</div>
+              </td>
+              <td> <div class="controls controls-join ">
+  									<div class="control btn-group shared-controls-syntheticselectcontrol control-default control-topsek" menu-name="topsek-detailusername-menu" style="padding: 2px 4px;width: 200px;">
+  										<a class="dropdown-toggle btn" href="#">
+  											<i class=" icon-large"/>
+  											<span class="link-label task-detail-value" value-key="负责人" value-key-en="user_name" value-default="--请选择负责人--">$table_username$
+  											</span>
+  											<span class="caret"/>
+  										</a>
+  										<div class="dropdown-menu dropdown-menu-selectable dropdown-menu-default" id="topsek-detailusername-menu" style="margin: 8px 0px 0px -43px;position: fixed;z-index: 1060;top: auto;left: auto;">
+  											<div class="arrow"/>
+  											<ul class="dropdown-menu-main">
+  											 
+  											</ul>
+  										</div>
+  									</div>
+  								</div>
+              </td>
+              <td style="display:none">
+                <div class="container">
+            <div class="skills loading" style="width:$table_resolution$%;background-color:$table_color$">$table_resolution$%</div>
+          </div>
+              </td>
+          <td>
+                  <a user_id="$userid$" class="btn btn-horizon update_task_info">保存</a>  <a class="btn hide_task_detail" style="">
+            <i class="fa fa-arrow-left" aria-hidden="true"/>返回</a>
+                </td>
+            </tr>
+          </table>
+          </div>
+        </div>
+    </html>
+    </panel>
+  </row>
+  <row id="tms_mytask_row2">
+    <panel id="tms_mytask_panel1">
+      <html>
+      <ul id="tabs" class="nav nav-tabs">
+            <li style="display:none">
+              <a href="#" class="toggle-tab" data-toggle="tab" data-elements="默认">任务明细</a>
+            </li>
+            <li class="active">
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_related_asmasset" data-elements="tms_mytask_row2">资产信息</a>
+            </li>
+            
+           <li>
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_related_journal_manager" data-elements="tms_mytask_row2">工作日志</a>
+            </li>
+            <li>
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_related_contact_manager" data-elements="tms_mytask_row2">联系人</a>
+            </li>
+            
+           <li>
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_related_log_manager" data-elements="tms_mytask_row2">审计日志</a>
+            </li>
+        
+      </ul>
+    </html>
+    </panel>
+    <panel id="tms_mytask_panel2">
+      <html>
+       <iframe src="tms_related_asmasset?hideChrome=true&amp;hideEdit=true&amp;hideTitle=true&amp;taskid=$form.taskid$" id="tms_mytask_iframe" width="100%" scrolling="no" border="0" frameborder="0"/>
+</html>
+    </panel>
+  </row>
+</form>

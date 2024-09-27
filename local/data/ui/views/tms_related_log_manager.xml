@@ -1,0 +1,17 @@
+<dashboard script="tms_related_log_manager.js" stylesheet="./css/tms_related_log_manager.css">
+  <label>审计日志-审核</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| tmsapi "获取任务日志" "$taskid$" 
+| table create_time audit_log</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

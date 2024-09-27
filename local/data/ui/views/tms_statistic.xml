@@ -1,0 +1,392 @@
+<form theme="light" script="tms_statistic.js,tms_general.js" stylesheet="./css/font-awesome.min.css,./css/security_event_management.css,./css/tms_general.css">
+  <label>处理统计</label>
+  <search id="page_navigation">
+    <query>| `page_navigation("$env:app$","$env:page$")`</query>
+  </search>
+  <fieldset submitButton="false">
+    <input type="time" token="time">
+      <label>时间</label>
+      <default>
+        <earliest>0</earliest>
+        <latest></latest>
+      </default>
+    </input>
+    <input type="link" token="show_row">
+      <label></label>
+      <choice value="任务处理">任务处理</choice>
+      <choice value="SOAR">SOAR</choice>
+      <default>任务处理</default>
+      <initialValue>任务处理</initialValue>
+      <change>
+        <condition value="任务处理">
+          <set token="rw_hide"></set>
+          <unset token="soar_hide"></unset>
+        </condition>
+        <condition value="SOAR">
+          <unset token="rw_hide"></unset>
+          <set token="soar_hide"></set>
+        </condition>
+      </change>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <html>
+        <div id="page_navigation_div"/>
+      </html>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel>
+      <html>
+        <h2>
+          <font size="5px">任务统计</font> 
+        </h2>
+        <style>
+          #pl1,#pl2{
+          width:25% !important;
+          }
+          #pl3{
+          width:50% !important;
+          }
+          #pl4 .panel-title{
+          margin: 10px 0  !important;
+    font-weight: 400  !important;
+    size: 5px  !important;
+    font-size: x-large  !important;
+    }
+        </style>
+      </html>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel id="pl1">
+      <title>任务数量</title>
+      <single>
+        <search>
+          <query>| tmsdbquery "select" "select COUNT(1) from task_info" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="height">120</option>
+        <option name="rangeColors">["0x0073e7","0x0073e7"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel id="pl2">
+      <title>任务处理率</title>
+      <single>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_info " "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+| eval stag=if(status="已完成" OR status="已关闭",1,0)
+| top stag
+| search stag=1
+| table percent</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="height">121</option>
+        <option name="numberPrecision">0.00</option>
+        <option name="rangeColors">["0xdc4e41","0xf1813f","0x90d26d"]</option>
+        <option name="rangeValues">[60,85]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">0</option>
+        <option name="unit">%</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel id="pl3">
+      <title>任务处理趋势</title>
+      <chart>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_info" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"|table create_time status|eval _time=strptime(create_time,"%F %T")|timechart count by status| addtotals fieldname="total"|eval 未关闭='处理中'+'已认领'+'未认领'+'未通过'+'NULL' |table _time 未关闭 total|rename total as 总数</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.fieldColors">{"已关闭":0x00BB00,"处理完成":0xF2B827,"未处理":0xff0000}</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="height">100</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+      </chart>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel id="pl4">
+      <title>处理追踪</title>
+      <input type="dropdown" token="status">
+        <label>状态</label>
+        <choice value="*">All</choice>
+        <choice value="已关闭">已关闭</choice>
+        <choice value="处理中">处理中</choice>
+        <choice value="已完成">已完成</choice>
+        <choice value="审核中">审核中</choice>
+        <choice value="未通过">未通过</choice>
+        <choice value="已认领">已认领</choice>
+        <choice value="未认领">未认领</choice>
+        <default>未认领</default>
+        <initialValue>未认领</initialValue>
+      </input>
+      <input type="dropdown" token="soar_status">
+        <label>联动soar</label>
+        <choice value="&gt;=0">All</choice>
+        <choice value="=1">启用</choice>
+        <choice value="=0">禁用</choice>
+        <default>&gt;=0</default>
+        <initialValue>&gt;=0</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel>
+      <single>
+        <search>
+          <query>| tmsdbquery "select" "select COUNT(1) from task_info ti,task_list tl where ti.status='$status$' AND tl.id=ti.task_id AND tl.soar_status$soar_status$" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">50</option>
+        <option name="rangeColors">["0x0073e7","0x0073e7"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">0</option>
+        <option name="underLabel">任务总数</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="task_type">*</set>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <query>| tmsdbquery "select" "select COUNT(1) from task_info ti,task_list tl where ti.task_type='安全事件' AND ti.status='$status$' AND tl.id=ti.task_id AND tl.soar_status$soar_status$  " "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">50</option>
+        <option name="rangeColors">["0x7ABBFD","0xdc4e41"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">0</option>
+        <option name="underLabel">安全事件</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="form.task_type">安全事件</set>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <preview>
+            <set token="sum">$result.sum$</set>
+            <set token="hg1">$result.体系审计（内审）$</set>
+            <set token="hg2">$result.备份与恢复$</set>
+            <set token="hg3">$result.外部审计$</set>
+            <set token="hg4">$result.安全事件处置$</set>
+            <set token="hg5">$result.安全测试与加固$</set>
+            <set token="hg6">$result.安全设备运维$</set>
+            <set token="hg7">$result.应急演练$</set>
+            <set token="hg8">$result.日志审计$</set>
+            <set token="hg9">$result.系统运维$</set>
+            <set token="hg10">$result.账号审计$</set>
+          </preview>
+          <query>| tmsdbquery "select" "select COUNT(1) from task_info ti,task_list tl where ti.task_type='定期任务' AND ti.status='$status$' AND tl.id=ti.task_id AND tl.soar_status$soar_status$ " "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">50</option>
+        <option name="rangeColors">["0x0073e7","0x0073e7"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">0</option>
+        <option name="trendColorInterpretation">inverse</option>
+        <option name="underLabel">定期任务</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="form.task_type">定期任务</set>
+        </drilldown>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <search>
+          <query>| tmsdbquery "select" "select COUNT(1) from task_info ti,task_list tl where ti.task_type='指标任务' AND ti.status='$status$' AND tl.id=ti.task_id AND tl.soar_status$soar_status$ " "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">all</option>
+        <option name="height">50</option>
+        <option name="rangeColors">["0x0073e7","0x0073e7"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="refresh.time.visible">0</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">0</option>
+        <option name="trendColorInterpretation">inverse</option>
+        <option name="underLabel">指标任务</option>
+        <option name="useColors">1</option>
+        <drilldown>
+          <set token="form.task_type">指标任务</set>
+        </drilldown>
+      </single>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel>
+      <html>
+        <h2>
+          <font size="5px">处理明细</font> 
+        </h2>
+      </html>
+    </panel>
+  </row>
+  <row depends="$rw_hide$">
+    <panel>
+      <input type="dropdown" token="task_name">
+        <label>任务名称</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>name</fieldForLabel>
+        <fieldForValue>name</fieldForValue>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_info where status='$status$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+| dedup name</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="yuqi" searchWhenChanged="true">
+        <label>是否逾期</label>
+        <choice value="*">All</choice>
+        <choice value="未逾期">未逾期</choice>
+        <choice value="已逾期">已逾期</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="dropdown" token="create">
+        <label>创建人</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>account</fieldForLabel>
+        <fieldForValue>account</fieldForValue>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_user" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="owner">
+        <label>处理人</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+        <fieldForLabel>account</fieldForLabel>
+        <fieldForValue>account</fieldForValue>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_user" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+        </search>
+      </input>
+      <input type="dropdown" token="shenpi">
+        <label>审批人</label>
+        <choice value="*">All</choice>
+        <default>*</default>
+        <fieldForLabel>account</fieldForLabel>
+        <fieldForValue>account</fieldForValue>
+        <search>
+          <query>| tmsdbquery "select" "select * from task_user" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+      </input>
+      <input type="dropdown" token="task_type">
+        <label>任务类型</label>
+        <choice value="*">All</choice>
+        <choice value="定期任务">定期任务</choice>
+        <choice value="安全事件">安全事件</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="task_table">
+        <search>
+          <query>| tmsdbquery "select" "select ti.* from task_info ti,task_list tl where ti.status='$status$' AND tl.id=ti.task_id AND tl.soar_status$soar_status$" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+| search name="$task_name$" task_type="$task_type$"
+| table id task_type name level create_user user_name role status update_time
+| rename id as ID task_type as 任务类型 name as 任务名称 level as 任务等级 create_user as 创建人 user_name as 处理人 role as 角色 status as 状态 update_time as 最近一次更新时间|eval tag=1
+| append 
+    [| makeresults 
+    | eval 任务类型=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="wrap">false</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$soar_hide$">
+    <panel>
+      <html>
+        <h2>
+          <font size="5px">SOAR</font> 
+        </h2>
+      </html>
+    </panel>
+  </row>
+  <row depends="$soar_hide$">
+    <panel>
+      <input type="text" token="soar_id">
+        <label>ID</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="soar_table">
+        <search>
+          <query>|readsoarworkflow "report_list"|search id="$soar_id$"|table id workflow_name create_time|rename id as ID workflow_name as 任务名称 create_time as 开始执行时间|sort - ID|join type=left ID [|readsoarworkflow report_detail_stats|xyseries id status count|rename 0 as 正常 1 as 警告 2 as 错误 id as ID]|fillnull value=0 正常 警告 错误</query>
+          <earliest>$time.earliest$</earliest>
+          <latest>$time.latest$</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</form>

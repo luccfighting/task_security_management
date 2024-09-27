@@ -1,0 +1,167 @@
+<form script="tabs.js,./js/tms_mytask_for_mss.js,tms_general.js" stylesheet="./css/font-awesome.min.css,tabs.css,./css/tms_mytask_for_mss.css,./css/tms_general.css">
+  <label>我的任务</label>
+  <fieldset submitButton="false"></fieldset>
+  <row depends="$hide$">
+    <panel>
+      <input type="link" token="data_mem_type" id="data_mem_type_link">
+        <label></label>
+        <choice value="我的任务">我的任务</choice>
+        <default>我的任务</default>
+        <initialValue>我的任务</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="unclaimed_img task_info" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="未认领">0</a>
+                <p/>
+                未认领
+              </div>
+            </div>
+            
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="claim_img task_info" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="已认领">0</a>
+                <p/>
+                已认领
+              </div>
+            </div>
+            
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="processing_img task_info" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="处理中">0</a>
+                <p/>
+                处理中
+              </div>
+            </div>
+           
+            </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+          <div class="event1_1">
+            <div class="event2">
+              <div class="fail_img task_info" id="tab-nbzc"/>
+              <div class="anum1">
+                <a class="anum loophole_count event_count" data-value="task_info" data_type="未通过">0</a>
+                <p/>
+                未通过
+              </div>
+            </div>
+           </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <div class="event_1">
+          <div class="event_2">
+            <div class="event1_1">
+              <div class="event2">
+                <div class="completed_img task_info" id="tab-hlwzc"/>
+                <div class="anum1">
+                  <a class="anum loophole_count event_count" data_type="task_info" data-value="已完成">0</a>
+                  <p/>
+                  已完成
+                </div>
+            </div>
+           
+          </div>
+        </div>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row id="zjld_row">
+    <panel>
+      <html>
+        <!--<a id="zjld_export" style="    float: right;     position: absolute;     margin-top: -112px;     margin-left: 100%;     left: -85px;">前往导出&gt;&gt;</a>-->
+        
+        <div id="zjld_btn_div"/>
+      </html>
+    </panel>
+  </row>
+  <row id="asm_vulner_overview_row">
+    <panel id="asm_vulner_overview_panel">
+      <input type="text" token="name" id="dev_ip_input">
+        <label>名称</label>
+      </input>
+      <input type="text" token="task_type" id="dev_name_input">
+        <label>任务属性</label>
+      </input>
+      <input type="text" token="description">
+        <label>任务描述</label>
+      </input>
+      <input type="text" token="level" id="dev_mac_input">
+        <label>级别</label>
+      </input>
+      <input type="text" token="create_user" id="vlan_input">
+        <label>创建人</label>
+      </input>
+      <input type="dropdown" token="role">
+        <label>负责组</label>
+        <choice value="">All</choice>
+        <choice value="一线">一线</choice>
+        <choice value="二线">二线</choice>
+        <choice value="三线">三线</choice>
+        <default></default>
+      </input>
+      <input type="text" token="user_name">
+        <label>负责人</label>
+      </input>
+      <input type="dropdown" token="status">
+        <label>状态</label>
+        <choice value="">All</choice>
+        <choice value="未认领">未认领</choice>
+        <choice value="已认领">已认领</choice>
+        <choice value="处理中">处理中</choice>
+        <choice value="未通过">未通过</choice>
+        <choice value="已完成">已完成</choice>
+        <default></default>
+      </input>
+      <html>
+        <div class="zjld_filter_label" style="margin-left: 12px;"/>
+        <div id="return_div" style="display:none">
+            <a class="btn-topsek-config" data-value="return" conf_id="">返回</a>
+          </div>
+         <div id="table_div"/>
+        <div id="table_tfoot_div" style="float: right;"/>
+    </html>
+    </panel>
+  </row>
+</form>

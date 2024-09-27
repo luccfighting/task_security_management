@@ -1,0 +1,45 @@
+<dashboard script="tms_related_device.js" stylesheet="./css/tms_related_device.css">
+  <label>相关设备</label>
+  <row>
+    <panel>
+      <html>
+        <div style="text-align:right">
+          <a href="/app/$env_app$/cmsoc_operation_configuration?form.dev_status=未认领" target="_blank">前往配置&gt;&gt;</a>
+        </div>
+      </html>
+      <table>
+        <search>
+          <query>| tmsapi "获取相关设备" "$taskid$"
+| table dev_ip 
+| append 
+    [| tmsapi "获取任务明细" "$taskid$"
+    | table dev_id 
+    | rename dev_id as dev_ip ] 
+| rename dev_ip as 设备IP 
+| appendcols 
+    [ | esapi 获取资产数据 内部资产 "dev_status:已认领"
+       |search [| tmsapi "获取相关设备" "$taskid$"
+        | table dev_ip 
+        | append 
+            [| tmsapi "获取任务明细" "$taskid$"
+            | table dev_id 
+            | rename dev_id as dev_ip ]] 
+  | eval is_online=if(is_online=1,"在线","离线") 
+ | rename dev_ip as IP dev_type as 设备类型 dev_mac as MAC地址 dev_class as 设备子类 dev_brand as 设备型号 bus_name as 所属业务 thirdparty_owner as 责任人 org_name as 组织/部门 dev_zone as 部署区域 is_online as 资产状态 ifacecnt as 网卡数量 score as 评分
+]| table 评分 IP 设备类型 设备子类 部署区域 所属业务 组织/部门 责任人 资产状态|eval tag=1
+| append 
+    [| makeresults 
+    | eval IP="",所属业务=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,315 @@
+<form script="tms_plugging_configuration.js" stylesheet="./css/tms_plugging_configuration.css">
+  <label>封堵配置</label>
+  <search>
+    <query>|tmsapi "获取SLA清单" |stats values(level) as level|eval level=mvjoin(level,"|"),role="一线|二线|三线",type="定期任务|安全事件"|eval firsttype="资产管理|风险识别|日常运行|应急响应|合规审计"</query>
+    <preview>
+      <condition>
+        <set token="level">$result.level$</set>
+        <set token="role">$result.role$</set>
+        <set token="type">$result.type$</set>
+        <set token="firsttype">$result.firsttype$</set>
+      </condition>
+    </preview>
+  </search>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <html>
+         <div style="text-align:right;margin: 5px 10px 0px 0px;">
+         <!--<button type="button" class="btn btn-primary btn-topsek " style="float:left;">编辑</button> -->
+       <button type="button" class="btn btn-primary btn-horizon btn-topsek-plugging">新增</button>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="text" token="acl_name">
+        <label>ACL名称</label>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <input type="text" token="dev_ip">
+        <label>设备地址</label>
+        <prefix>*</prefix>
+        <suffix>*</suffix>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+      <table id="plugging_table">
+        <search>
+          <query>| plugginglist
+| table title dev_type dev_name dev_ip acl_ipcount
+| rename title as ACL名称 dev_type as 设备类型 dev_name as 设备名称 dev_ip as 设备地址 acl_ipcount as IP限制数
+| eval 操作=ACL名称
+| table ACL名称 设备类型 设备名称 设备地址 IP限制数 操作
+| fillnull value="" ACL名称 设备类型 设备名称 设备地址 IP限制数 操作|eval tag=1
+| append 
+    [| makeresults 
+    | eval 操作=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+        </search>
+        <option name="count">30</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        
+          <style>
+
+
+	</style>
+        
+
+        <div class="alertOutBg">
+          <div class="alertOut">
+            <div style="text-align: center;margin-top:50px;">
+              <i class="fa fa-spinner fa-spin"/>正在保存</div>
+            </div>
+            <div class="modal-footer">	       
+            <a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">取消</a>
+          </div>
+        </div>
+        
+        <div class="deleteOutBg">
+          <div class="deleteOut">
+            <div style="text-align: center;margin-top:50px;font-size:large;">
+              <i class="fa fa-spinner fa-spin"/>确定删除该条配置吗？</div>
+              <div class="modal-footer">	       
+            <a href="#" class="btn cancel btn-secondary modal-btn-cancel" data-dismiss="modal">取消</a>
+            <a href="#" class="btn btn-primary btn-horizon modal-btn-primary pull-right deletesave" id="deletesave" style="padding: 6px 15px;     font-weight: 500;     border: none;">确定</a> 
+          </div>
+            </div>
+            
+        </div>
+        
+      <div class="modal fade in createpluggingip" style="display: none; width: 300px; margin-left: -150px;z-index:3000;" aria-hidden="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close modalfadeclose" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button><h4 class="modal-title">手动封堵</h4></div>
+          <div class="modal-body">
+            <div>IP地址:<br/><br/><input type="text" value="" class="ce_prompt_input input input-text inp-pluggingip" style="width: 100%; background-color: white; color: #000;"/></div>
+            <div>封堵周期:<br/><br/><input type="text" value="" class="ce_prompt_input input input-text inp-pluggingtime" list="templatelist" style="width: 100%; background-color: white; color: #000;"/></div>
+            <datalist id="templatelist"></datalist>
+          </div>
+          <div class="modal-footer"><button type="button" class="btn btn-horizon btn-addpluggingip">封堵</button><button type="button" class="btn btn-cancel modalfadeclose">返回</button></div></div></div></div>
+          
+        
+  <div class="popOutBg"/>
+	<div class="popOut popPlugging"> 
+   <div class="modal-header"> 
+    <span title="关闭" class="close popPluggingclose"> x </span> 
+    <h3 class="modal-title">新增ACL</h3> 
+   </div> 
+	<div class="content-wrapper query-dialog-wrapper">
+		<div class="modal-body modal-body-scrolling" style="height:350px;">
+			<div id="table_plugging_config" style="text-align:centor;">
+				<table border="0" style="margin:0;">
+					<tbody id="ad">
+						<tr>
+							<td height="30px" width="100px">
+								ACL名称
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="ACL名称" value-key-en="acl_name" style="margin: auto;" value="" placeholder="请输入ACL名称"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								ACL优先级
+							</td>
+							<td height="30px" width="250px">
+								<input type="number" class="inp plugging-topsek-value" value-key="ACL优先级" value-key-en="acl_level" style="margin: auto;" value="" placeholder="请输入ACL优先级"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								设备类型
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="dev_type" style="margin: auto;" value="" placeholder="请输入设备类型"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								设备名称
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="dev_name" style="margin: auto;" value="" placeholder="请输入设备名称"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								设备IP
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="dev_ip" style="margin: auto;" value="" placeholder="请输入设备IP"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								账号
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="user_name" style="margin: auto;" value="" placeholder="请输入账号"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								密码
+							</td>
+							<td height="30px" width="250px">
+								<input type="password" class="inp plugging-topsek-value" value-key="API" value-key-en="password" style="margin: auto;" value="" placeholder="请输入密码"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								特权密码
+							</td>
+							<td height="30px" width="250px">
+								<input type="password" class="inp plugging-topsek-value" value-key="API" value-key-en="enpass" style="margin: auto;" value="" placeholder="请输入特权密码"/>
+							</td>
+						</tr>
+							</tbody>
+				</table>
+						<legend>限制信息</legend>
+				<table border="0" style="margin:0;">
+					<tbody>
+						<tr>
+							<td height="30px" width="100px">
+								ACL IP数限制
+							</td>
+							<td height="30px" width="250px">
+								<input type="number" class="inp plugging-topsek-value" value-key="API" value-key-en="acl_ipcount" style="margin: auto;" value="" placeholder="请输入IP数限制"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								封堵周期
+							</td>
+							<td height="30px" width="250px">
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								第一次
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="acl_first" style="margin: auto;" value="" placeholder="请输入封堵周期"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								第二次
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="acl_second" style="margin: auto;" value="" placeholder="请输入封堵周期"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								第三次
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="acl_third" style="margin: auto;" value="" placeholder="请输入封堵周期"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								重置时间
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="acl_reload" style="margin: auto;" value="" placeholder="请输入重置时间"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								自动封堵
+							</td>
+							<td height="30px" width="250px" id="input_radio_td" dict_id="3">
+							  
+                <input type="radio" class="inp plugging-topsek-value" value-key="类型" value-key-en="is_auto" is_default="true" style="margin: auto;" defaultvalue="true" name="is_auto" checked="checked"> 启用</input>
+                <input type="radio" class="inp plugging-topsek-value" value-key="类型" value-key-en="is_auto" is_default="true" style="margin: auto;" defaultvalue="false" name="is_auto"> 禁用</input>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+								自动封堵索引
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="auto_index" style="margin: auto;" value="" placeholder="请输入自动封堵索引"/>
+							</td>
+						</tr>
+						<tr>
+							<td height="30px" width="100px">
+							  自动封堵参数
+							</td>
+							<td height="30px" width="250px">
+								<input type="text" class="inp plugging-topsek-value" value-key="API" value-key-en="auto_field" style="margin: auto;" value="" placeholder="请输入自动封堵参数"/>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	  <div style="display:none" class="fields2json" active-key="plugging-topsek-value"> dev_ip port service service_version</div>
+	  <a href="#" class="btn cancel btn-secondary modal-btn-cancel popPluggingclose" data-dismiss="modal">取消</a>
+		<a href="#" class="btn btn-horizon modal-btn-primary pull-right addplugging" tableid="asm_api_demo.csv" style="padding: 6px 15px;     font-weight: 500;     border: none;     ">
+			增加
+		</a>
+		<a href="#" class="btn btn-horizon modal-btn-primary pull-right changeplugging" tableid="asm_api_demo.csv" style="padding: 6px 15px;     font-weight: 500;     border: none;     ">
+			修改
+		</a>
+    
+	</div>
+  </div>
+  <div class="popOut popPluggingIP"> 
+   <div class="modal-header"> 
+    <span title="关闭" class="close popPluggingIPclose"> x </span> 
+    <h3 class="modal-title">ACL 封堵IP管理</h3> 
+   </div> 
+	<div class="content-wrapper query-dialog-wrapper">
+		<div class="modal-body modal-body-scrolling" style="height:350px;">
+			<div id="table_ip_config" style="text-align:centor;">
+			  <input placeholder="请输入要搜索的IP"></input>
+				<table id="iplisttable" border="0" style="margin:0;" class="pure-table pure-table-bordered">
+					<tbody>
+					  <tr>
+					    <th>IP地址</th>
+					    <th>解封时间</th>
+					    <th>操作</th>
+					  </tr>
+						<!--<tr>-->
+						<!--	<td height="30px" width="100px">192.168.30.192</td>-->
+						<!--	<td height="30px" width="250px">2022/5/12 20:00:00</td>-->
+						<!--	<td height="30px">-->
+						<!--	<a>解封</a>-->
+						<!--	</td>-->
+						<!--</tr>-->
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+	  <div style="display:none" class="fields2json" active-key="plugging-topsek-value"> dev_ip port service service_version</div>
+	  <a href="#" class="btn cancel btn-secondary modal-btn-cancel popPluggingIPclose" data-dismiss="modal">返回</a>
+		<a href="#" class="btn btn-horizon modal-btn-primary pull-right addpluggingip" tableid="asm_api_demo.csv" style="padding: 6px 15px;     font-weight: 500;     border: none;     ">
+			手动封堵
+		</a>
+    
+	</div>
+  </div>
+      </html>
+    </panel>
+  </row>
+</form>

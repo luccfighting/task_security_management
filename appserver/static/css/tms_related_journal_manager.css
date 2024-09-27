@@ -1,0 +1,21 @@
+.dashboard-body {
+    padding: 0 !important;
+    }
+.dashboard-header {
+    margin-bottom: 0px  !important;
+    padding-top: 0px  !important;
+    min-height: 0px  !important;
+}
+
+
+.btn-horizon:hover {
+    background-color: #297bd3;
+    border-color: #297bd3;
+    color: #fff;
+}
+
+.btn-horizon{
+    background-color: #2e89ea;
+    border-color: #2e89ea;
+    color: #fff;
+}

@@ -1,0 +1,82 @@
+#config_row{
+    margin: 30px auto;
+    width: 940px;
+}
+
+.entityEditForm .formWrapper .widget {
+    margin-bottom: 5px;
+    padding-right: 20px;
+    clear: both;
+}
+
+.widget>label {
+    float: left;
+    text-align: right;
+    width: 250px;
+    padding: 10px 15px 10px 20px;
+    box-sizing: border-box;
+    margin-right: 0;
+    line-height: 20px;
+}
+.widget>div {
+    margin-left: 250px;
+    margin-bottom: 5px;
+}
+.widget>div>input {
+    width: 668px;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+.widget.radioWidget input[type=radio] {
+    margin: 4px;
+    font-size: 16px;
+    height: 12px;
+    opacity: 1.01;
+    width: auto;
+    border: 0;
+}
+ .widget.radioWidget input[type=radio]+.radio-label, .widget.radioWidget input[type=radio]+label {
+    position: relative;
+    display: contents;
+}
+
+
+.jmFormActions {
+    min-height: 32px;
+    padding: 20px!important;
+    text-align: right;
+    overflow: hidden;
+}
+.jmFormActions .splButton-primary, .jmFormActions .splButton-secondary {
+    min-width: 100px;
+    font-weight: 500;
+    margin-left: 10px;
+    line-height: 20px;
+}
+.splButton-secondary, .splButton-tertiary, .splRadio-control {
+    border: 1px solid #c3cbd4;
+}
+
+.splButton-primary {
+    padding: 6px 15px;
+    font-weight: 500;
+    border: none;
+    background-color: #5cc05c;
+    border-color: transparent;
+}
+
+.widgeterror {
+    color: #dc4e41;
+    font-weight: 700;
+}
+
+.orphanLabel{
+    float: left;
+    text-align: right;
+    width: 250px;
+    padding: 10px 15px 10px 20px;
+    box-sizing: border-box;
+    margin-right: 0;
+    line-height: 20px;
+}
+

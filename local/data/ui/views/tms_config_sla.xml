@@ -1,0 +1,45 @@
+<dashboard script="tms_config_sla.js" stylesheet="./css/tms_config_sla.css">
+  <label>SLA配置</label>
+  <row>
+    <panel>
+      <html>
+      <div style="text-align:right;margin: 5px 10px 0px 0px;">
+        
+        <button type="button" class="btn btn-horizon btn-topsek-addnewsla">新增</button>
+      
+      </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table id="task_sla_table">
+        <search>
+          <query>| `getslalist`
+| fillnull value="" account name zone business department role email mobile 
+| eval detail=response+"|"+response_send+"|"+resolution+"|"+resolution_send
+| eval 操作=id+"#slasplit#"+can_delete
+| table id level response response_send resolution resolution_send 操作 
+| rename level as 任务等级 response as 响应时间 response_send as 响应超时通知时间 resolution as 处理时间 resolution_send as 处理超时通知时间
+
+| table 任务等级 响应时间 响应超时通知时间 处理时间 处理超时通知时间 操作|eval tag=1
+| append 
+    [| makeresults 
+    | eval 操作=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>-30d@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <html>
+        <legend/>
+        表格涉及所有时间，单位均为小时。
+      </html>
+    </panel>
+  </row>
+</dashboard>

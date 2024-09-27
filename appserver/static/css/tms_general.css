@@ -1,0 +1,47 @@
+/* 右上角编辑等按钮和panel对应放大镜的右下角部分隐藏 */
+.dashboard-cell.hidden, .dashboard-row.hidden, .edit-mode .element-footer, .edit-mode .refresh-time-indicator, .preview-body .element-footer {
+    display: none !important;
+}
+.dashboard-header-editmenu{
+    display: none !important;
+}
+.element-footer {
+    display: none !important;
+}
+
+/* 蓝色按钮样式 */
+.btn-horizon:hover {
+    background-color: #00baff;
+    border-color: #00baff;
+    color: #fff;
+}
+
+.btn-horizon:focus {
+    background-color: #0073e7;
+    border-color: #0073e7;
+    color: #fff;
+}
+.btn-horizon{
+    background-color: #0073e7;
+    border-color: #0073e7;
+    color: #fff;
+}
+
+  .ui-resizable-s{
+          display:none !important;
+          }
+    .splunk-status-indicator {
+        font-weight: 100 !important;
+    }
+
+.row-expansion-toggle{
+    padding-left: 8px !important;
+}
+.icon-triangle-right-small:before {
+    content: "✚" !important;
+    color: #4d5054;
+}
+.icon-triangle-down-small:before {
+    content: "━" !important;
+    color: #4d5054;
+}

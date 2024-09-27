@@ -1,0 +1,22 @@
+<dashboard script="tms_related_device_manager.js" stylesheet="./css/tms_related_device_manager.css">
+  <label>相关设备-审核</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| tmsapi "获取相关设备" "$taskid$" 
+| table dev_ip 
+| append 
+    [| tmsapi "获取任务明细" "$taskid$"
+    | table dev_id 
+    | rename dev_id as dev_ip ] 
+| rename dev_ip as 设备IP</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

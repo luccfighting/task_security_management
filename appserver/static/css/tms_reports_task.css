@@ -1,0 +1,59 @@
+.cpKKED[data-inline] {
+    width: 100% !important;
+}
+
+#bus_field,#assets_field,#domain_field{
+    width:100% !important;
+}
+div[data-view="views/dashboard/element/Footer"]{
+    display: none;
+}
+#bus_table div[data-view="views/dashboard/element/Footer"] ,#assets_table div[data-view="views/dashboard/element/Footer"] ,#domain_table div[data-view="views/dashboard/element/Footer"]{
+    display: block;
+}
+
+#bus_field div[data-view="splunkjs/mvc/multidropdownview"],#assets_field div[data-view="splunkjs/mvc/multidropdownview"],#domain_field div[data-view="splunkjs/mvc/multidropdownview"]{
+     margin-right:100px !important;
+}
+#bus_table div[data-view="views/dashboard/element/Footer"] div,#assets_table div[data-view="views/dashboard/element/Footer"] div,#domain_table div[data-view="views/dashboard/element/Footer"] div{
+    display: block;
+    padding: 6px 15px;
+    font-weight: 500;
+    border: none;
+    background-color: #c1c1c1;
+    border-color: transparent;
+    top: -62px;
+    right: 10px;
+    width: 50px;
+    height: 24px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    z-index: 999;
+}
+
+.btn-pill.export{
+    display: contents !important;
+}
+
+.icon-export{
+    font-style: normal;
+    content: "导出";
+}
+
+.icon-export:before {
+    content: "\EC68导出" !important;
+}
+
+.btn-pill.search,.btn-pill.inspect,.btn-pill.refresh,.btn-pill.stopSearch,.refresh-time-indicator.dashboard-element-timeindicator{
+    display: none !important;
+}
+h2[data-view="views/dashboard/header/Title"]{
+    display: none;
+}
+.hide-global-filters,.edit-btn,.edit-other{
+    display: none;
+}
+
+

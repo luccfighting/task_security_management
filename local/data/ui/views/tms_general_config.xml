@@ -1,0 +1,117 @@
+<dashboard script="tms_general_config.js" stylesheet="./css/tms_general_config.css">
+  <label>通用配置</label>
+  <row id="config_row">
+    <panel>
+      <html>
+      	<div class="fieldsetWrapper  " id="item-mailserv">
+      		<fieldset id="">
+      			<legend>资产流程设置</legend>
+      
+      			<div id="item-ssl_or_tls" class="radioWidget  widget">
+      				<span class="orphanLabel">是否启用</span>
+      				<div>
+      					<div class="widgeterror"></div>
+      
+      
+      
+      					<input type="radio" class="radio " id="ssl_or_tls1" name="ssl_or_tls" value="1" checked="checked" />
+      					<label for="ssl_or_tls1">启用</label>
+      
+      					<input type="radio" class="radio " id="ssl_or_tls2" name="ssl_or_tls" value="0" />
+      					<label for="ssl_or_tls2">禁用</label>
+      
+      					<!--<p class="exampleText"><em>咨询 SMTP 服务器管理员。  启用 SSL 时，邮件主机应包括端口。 即: smtp.ESC.com:465</em></p>-->
+      				</div>
+      			</div>
+      			<input type="hidden" name="use_ssl" id="item-use_ssl" value="1" />
+      			<input type="hidden" name="use_tls" id="item-use_tls" value="0" />
+      			<legend>维保通知设置</legend>
+      
+      			<div id="item-ma_time" class="radioWidget  widget">
+      				<span class="orphanLabel">是否启用</span>
+      				<div>
+      					<div class="widgeterror"></div>
+      
+      
+      
+      					<input type="radio" class="radio " id="ma_time1" name="maintenance" value="1" checked="checked" />
+      					<label for="ssl_or_tls1">启用</label>
+      
+      					<input type="radio" class="radio " id="ma_time2" name="maintenance" value="0" />
+      					<label for="ssl_or_tls2">禁用</label>
+      
+      					<!--<p class="exampleText"><em>咨询 SMTP 服务器管理员。  启用 SSL 时，邮件主机应包括端口。 即: smtp.ESC.com:465</em></p>-->
+      				</div>
+      			</div>
+      			<div class="maintenance_div" style="padding: 3em;border: 1px solid #c3cbd4;margin: 20px 12em;">
+                            <table border="0" style="margin:auto;">
+                                <tbody id="action_email">
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            通知时间
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <input type="text" class=" horizon-maintenance-value" value-key="通知时间" value-key-en="notice_time_range" style="margin: auto;width:400px" value="" placeholder="提前N天通知"></input>
+                                        </td>
+                                    </tr>
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            收件人
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <textarea type="text" class=" horizon-maintenance-value" value-key="收件人" value-key-en="email_to" style="margin: auto;width:400px" value="" placeholder="请输入收件人"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            抄送人
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <textarea type="text" class="horizon-maintenance-value" value-key="抄送人" value-key-en="email_cc" style="margin: auto;width:400px" value="" placeholder="请输入抄送人"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            密送人
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <textarea type="text" class="horizon-maintenance-value" value-key="密送人" value-key-en="email_bcc" style="margin: auto;width:400px" value="" placeholder="请输入密送人"></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            标题
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <input type="text" class="inp horizon-maintenance-value" value-key="标题" value-key-en="email_subject" style="margin: auto;    width: 100%;" value="" placeholder="请输入标题，变量格式：${变量名}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="maintenance_tr actiontype_3">
+                                        <td height="30px" width="100px">
+                                            正文
+                                        </td>
+                                        <td height="30px" width="400px">
+                                                <textarea type="text" class="horizon-maintenance-value" value-key="正文" value-key-en="email_message" style="margin: auto;width:400px" value="" placeholder="请输入正文，变量格式：${变量名}，例：资产${dev_ip}即将超过维保时间，请及时处理"></textarea>
+                                        </td>
+                                    </tr>
+                                    <!--<tr class="maintenance_tr actiontype_3">-->
+                                    <!--    <td height="30px" width="100px">-->
+                                    <!--        附件-->
+                                    <!--    </td>-->
+                                    <!--    <td height="30px" width="400px">-->
+                                    <!--            <input type="radio" value="1" class=" horizon-maintenance-value" name="appendix"/>启用<input type="radio" class=" horizon-maintenance-value" value="0" name="appendix" checked="checked"/>禁用-->
+                                    <!--    </td>-->
+                                    <!--</tr>-->
+                            </tbody></table>
+                        </div>
+      		</fieldset>
+      	</div>
+      	<div class="jmFormActions" style="">
+      		<button type="submit" class="btn btn-horizon btn-primary" accesskey="s">
+      			<span>保存</span>
+      		</button>
+      	</div>
+    </html>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,30 @@
+.node {
+  cursor: move; 
+}
+.link-cricle {
+  content: '';
+  position: absolute;
+  top: 50%; /* 定位到div的垂直中间 */
+  right: -10px; /* 从右边边框的位置向左移动10px */
+  transform: translateY(-50%); /* 垂直居中 */
+  width: 20px; /* 设置圆圈的宽度 */
+  height: 20px; /* 设置圆圈的高度 */
+  background-color: black; /* 设置圆圈的颜色 */
+  border-radius: 50%; /* 圆形的关键点 */
+  cursor: pointer;
+}
+
+.node::before {
+  content: '';
+  position: absolute;
+  top: 50%; /* 定位到div的垂直中间 */
+  left: -10px; /* 从右边边框的位置向左移动10px */
+  transform: translateY(-50%); /* 垂直居中 */
+  width: 20px; /* 设置圆圈的宽度 */
+  height: 20px; /* 设置圆圈的高度 */
+  background-color: black; /* 设置圆圈的颜色 */
+  border-radius: 50%; /* 圆形的关键点 */
+}
+#tab-taskconfig{
+    background:url(../images/任务配置.png) 0 0 no-repeat;
+}

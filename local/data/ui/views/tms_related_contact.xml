@@ -1,0 +1,26 @@
+<dashboard script="tms_related_contact.js" stylesheet="./css/tms_related_contact.css">
+  <label>联系人</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| tmsapi "获取联系人" "$taskid$"
+| table name account role email mobile 
+| rename name as 名称 account as 账号 email as 电子邮箱 mobile as 手机号 role as 角色 
+| eval tag=1 
+| append 
+    [| makeresults 
+    | eval 账号="" 
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1 
+| fields - count2 _time tag</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

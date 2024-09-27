@@ -1,0 +1,19 @@
+<nav search_view="search">
+  <!--<view name="search" default='true' />-->
+  <view name="tms_overview" />
+  
+  <view name="tms_mytask" />
+  <view name="tms_mytask_manager" />
+  <view name="tms_configuration" />
+  <collection label="任务管理2.0">
+    <view name="tms_config"/>
+    <view name="tms_config_sla" />
+    <view name="tms_task_portrait" />
+    <view name="tms_task_portrait_v2" />
+    <view name="tms_asm_task_portrait" />
+    <view name="tms_mss_task_portrait" />
+    <view name="tms_xdr_task_portrait" />
+    <view name="tms_mytask_for_mss"/>
+  </collection>
+  <view name="dashboards" />
+</nav>

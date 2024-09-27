@@ -1,0 +1,453 @@
+<form>
+  <label>任务总览</label>
+  <fieldset submitButton="false"></fieldset>
+  <row id="li_row">
+    <panel>
+      <html>
+      <style>
+        .test{
+       float: left;
+    width: 100%;
+    height: 125px;
+    border-right: 1px solid #f2f4f5;
+    margin-right: 4px;
+    background: #fff;
+    list-style: none;
+    padding: 10px 20px;
+    }
+    #li_row .dashboard-panel{
+    background:unset !important;}
+    #li_row .html{
+    padding:0px;
+    }
+    #li_row ul{
+    margin:0px;
+    }
+    #row2_panel1{
+      width:66.66% !important;
+    }
+    #row2_panel2{
+      width:33.33% !important;
+    }
+    #input_filter_time{
+    width:100% !important}
+      </style>
+      <ul>
+        <li class="test" task_value="检测任务">
+          <h1>检测任务</h1>
+          <div>配置总数：$jc_count$;启用：$jc_count_on$;禁用：$jc_count_off$;</div>
+          <div>任务总数：$jc_total$;处理率：$jc_percent$%;</div>
+          <div>未认领：$jc_status_1$;处理中：$jc_status_2$;审核中：$jc_status_3$;已关闭：$jc_status_4$;</div>
+        </li>
+     
+      </ul>
+    </html>
+    </panel>
+    <panel>
+      <html>
+         <ul>
+        <li class="test" task_value="合规任务">
+          <h1>合规任务</h1>
+          <div>配置总数：$hg_count$;启用：$hg_count_on$;禁用：$hg_count_off$;</div>
+          <div>任务总数：$hg_total$;处理率：$hg_percent$%;</div>
+          <div>未认领：$hg_status_1$;处理中：$hg_status_2$;审核中：$hg_status_3$;已关闭：$hg_status_4$;</div>
+        </li>
+      </ul>
+      </html>
+    </panel>
+    <panel>
+      <html>
+        <ul>
+          <li class="test" task_value="安全事件">
+            <h1>安全事件</h1>
+            <div>告警总数：$event_count$;</div>
+            <div>单源：$event_count_1$;关联：$event_count_2$;</div>
+            <div>未处理：$event_status_1$;处理中：$event_status_2$;审核中：$event_status_3$;已关闭：$event_status_4$;</div>
+          </li>
+        </ul>
+      </html>
+    </panel>
+    <panel>
+      <html>
+         <ul>
+        <li class="test" task_value="SOAR">
+          <h1>响应处置</h1>
+          <div>剧本数：$soar_count$;</div>
+          <div>触发任务总数：$soar_total$;</div>
+          <div>今日执行数：$soar_count_1d$;近7日执行数：$soar_count_7d$;</div>
+        </li>
+      </ul>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel id="row2_panel1">
+      <title>近7日任务趋势图</title>
+      <chart>
+        <search>
+          <query>| makeresults count=7 
+| eval time=1 
+| accum time 
+| eval time=time-1 
+| eval _time=strftime(now()-(86400*time),"%Y/%m/%d") 
+| table _time * 
+| fields - time 
+| join type=left _time 
+    [| tmsapi "获取任务清单" |search task_type="定期任务" name="MLPS-*"
+    | table create_time 
+    | eval _time=strptime(create_time,"%F %T") 
+    | timechart count as 合规任务 span=1d 
+    | sort - _time 
+    | eval _time=strftime(_time,"%Y/%m/%d") 
+    | head 7] 
+| join type=left _time 
+    [| readsoarworkflow "report_list" 
+    | table create_time 
+    | eval _time=strptime(create_time,"%F %T") 
+    | timechart count as SOAR span=1d 
+    | sort - _time 
+    | eval _time=strftime(_time,"%Y/%m/%d") 
+    | head 7] 
+| join type=left _time 
+    [| tmsapi "获取任务清单" |search task_type="定期任务" task_firsttype="检测任务"
+    | table create_time 
+    | eval _time=strptime(create_time,"%F %T") 
+    | timechart count as 检测任务 span=1d 
+    | sort - _time 
+    | eval _time=strftime(_time,"%Y/%m/%d") 
+    | head 7] 
+| join type=left _time 
+    [| topsektimechart `es-con` index="alerting_notice_total" action="search" query="alert_name:* AND src_ip:* AND dst_ip:* AND (status:*) AND (alert_level:严重 OR alert_level:高危 OR alert_level:中危) NOT (status:已忽略) AND threat_stage:* AND threat_category:* AND rule_type:* AND NOT (threat_stage:其他 OR threat_stage:\"\") AND product:*" span=1d 
+    | rename doc_count as 安全事件 
+    | eval _time=strftime(key/1000,"%Y/%m/%d") |table _time 安全事件] 
+| fillnull value=0</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel id="row2_panel2">
+      <title>今日触发任务分布</title>
+      <chart>
+        <search>
+          <query>| tmsapi "获取任务清单" |search task_type="定期任务" task_firsttype="检测任务"
+    | table create_time 
+    | eval _time=strptime(create_time,"%F %T") 
+    | where _time&gt;=strptime(strftime(now(),"%F 00:00:00"),"%F %T") 
+    | stats count as count 
+| eval type="检测任务" 
+| append 
+    [| tmsapi "获取任务清单" |search task_type="定期任务" name="MLPS-*"
+    | table create_time 
+    | eval _time=strptime(create_time,"%F %T") 
+    | where _time&gt;=strptime(strftime(now(),"%F 00:00:00"),"%F %T") 
+    | stats count as count 
+    | eval type="合规任务"] 
+| append 
+    [| makeresults 
+    | eval count="$soar_count_1d$" 
+    | table count 
+    | eval type="SOAR"] |append [| topsekstats `es-con` index="alerting_notice_total" action="search" query="alert_name:* AND src_ip:* AND dst_ip:* AND (status:*) AND (alert_level:严重 OR alert_level:高危 OR alert_level:中危) NOT (status:已忽略) AND threat_stage:* AND threat_category:* AND rule_type:* AND NOT (threat_stage:其他 OR threat_stage:\"\") AND product:*"| eval type="安全事件" |rename total AS count]
+| table type count</query>
+          <earliest>@d</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="link" token="time" id="input_filter_time">
+        <label></label>
+        <choice value="当日">当日</choice>
+        <choice value="近7天">近7天</choice>
+        <choice value="近30天">近30天</choice>
+        <choice value="本月">本月</choice>
+        <choice value="上月">上月</choice>
+        <choice value="年度迄今">年度迄今</choice>
+        <change>
+          <condition value="当日">
+            <eval token="filter_time">strptime(strftime(now(),"%F 00:00:00"),"%F %T")</eval>
+          </condition>
+          <condition value="近7天">
+            <eval token="filter_time">strptime(strftime(now()-86400*7,"%F 00:00:00"),"%F %T")</eval>
+          </condition>
+          <condition value="近30天">
+            <eval token="filter_time">strptime(strftime(now()-86400*30,"%F 00:00:00"),"%F %T")</eval>
+          </condition>
+          <condition value="本月">
+            <eval token="filter_time">strptime(strftime(now(),"%Y-%m-01 00:00:00"),"%F %T")</eval>
+          </condition>
+          <condition value="上月">
+            <eval token="filter_time">strptime(strftime(now()-86400*30,"%Y-%m-01 00:00:00"),"%F %T")</eval>
+          </condition>
+          <condition value="年度迄今">
+            <eval token="filter_time">strptime(strftime(now(),"%Y-01-01 00:00:00"),"%F %T")</eval>
+          </condition>
+        </change>
+        <default>当日</default>
+        <initialValue>当日</initialValue>
+      </input>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>检测任务类型分布</title>
+      <chart>
+        <search>
+          <query>| makeresults count=1 
+| eval 主机漏洞=random()%10 
+| eval 应用漏洞=random()%10 
+| eval 合规基线=random()%100 
+| eval 弱口令=random()%100 
+| fields - _time 
+| transpose 
+| rename column as task_type 
+| join type=left task_type 
+    [|tmsapi "获取任务清单"|search task_type="定期任务" task_firsttype="检测任务"    | eval _time=strptime(create_time,"%F %T") 
+    | where _time&gt;=$filter_time$| eval task_status=if(soar_status="0","人工流程","自动处置") 
+| table task_secondtype name task_status 
+| stats count by task_secondtype task_status 
+| xyseries task_secondtype task_status count|rename task_secondtype as task_type] 
+| fillnull value=0 人工流程 自动处置|addtotals fieldname=sum | table task_type 人工流程 自动处置
+| sort - sum |fields - sum</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">数量</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>合规任务 分布</title>
+      <chart>
+        <search>
+          <query>| tmsapi "获取任务清单" 
+| search task_type="定期任务" name="MLPS-*" | eval _time=strptime(create_time,"%F %T") 
+    | where _time&gt;=$filter_time$ 
+| eval task_status=case(status="未认领","未认领",status="已关闭","已关闭",status="已完成" OR status="审核中","审核中",1=1,"处理中") | eval task_status=if(soar_status="0","人工流程","自动处置") 
+| table task_secondtype name task_status 
+| stats count by name task_status 
+| xyseries name task_status count
+|fillnull value=0 人工流程 自动处置
+| addtotals fieldname=total 
+| sort - total 
+| head 10 
+| fields - total</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">数量</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>安全事件</title>
+      <chart>
+        <search>
+          <query>|makeresults count=1|eval 信息收集=1|eval 网络入侵=2|eval 攻击提权=3|eval 内网渗透=4|eval 权限维持=5|eval 实现攻击=6|eval 痕迹清除=7|eval 数据泄露=8|fields - _time|transpose|rename column as threat_stage|join type=left threat_stage [| topsekstatsby `es-con` index="alerting_notice_total" action="search" query="alert_name:* AND src_ip:* AND dst_ip:* AND (status:*) AND (alert_level:严重 OR alert_level:高危 OR alert_level:中危) NOT (status:已忽略) AND threat_stage:* AND threat_category:* AND rule_type:* AND NOT (threat_stage:其他 OR threat_stage:\"\") AND product:*" fields="threat_stage"|rename key as threat_stage doc_count as count ]|join type=left threat_stage [| topsekstatsby `es-con` index="alerting_notice_journal" action="search" query="event_name:SOAR联动 AND threat_stage:*" fields="threat_stage" 
+    | rename key as threat_stage doc_count as soar_count]
+| fillnull value=0 count soar_count|eval 人工流程=count-soar_count|rename soar_count as 自动处置
+| table threat_stage 人工流程 自动处置 count|sort - count|fields - count</query>
+          <earliest>1675440000</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">数量</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>响应处置 执行剧本TOP 10</title>
+      <chart>
+        <search>
+          <query>|readsoarworkflow|table name|rename name as workflow_name |join type=left workflow_name [|readsoarworkflow "report_list"|eval _time=strptime(create_time,"%F %T")
+    | where _time&gt;=$filter_time$|stats count by  workflow_name]|fillnull value=0 count|sort - count|head 10</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="charting.axisLabelsY.majorUnit">1</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">数量</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">bar</option>
+        <option name="charting.chart.showDataLabels">all</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row depends="$hide$">
+    <panel>
+      <title>检测任务</title>
+      <table>
+        <search>
+          <preview>
+            <set token="jc_count">$result.count$</set>
+            <set token="jc_count_on">$result.count_on$</set>
+            <set token="jc_count_off">$result.count_off$</set>
+          </preview>
+          <query>|tmsapi "获取配置清单"|search task_type="定期任务" task_firsttype="检测任务" |stats count count(eval(status=1)) as count_on count(eval(status=0)) as count_off</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <search>
+          <preview>
+            <set token="jc_total">$result.total$</set>
+            <set token="jc_percent">$result.percent$</set>
+            <set token="jc_status_1">$result.未认领$</set>
+            <set token="jc_status_2">$result.处理中$</set>
+            <set token="jc_status_3">$result.审核中$</set>
+            <set token="jc_status_4">$result.已关闭$</set>
+          </preview>
+          <query>|tmsapi "获取任务清单"|search task_type="定期任务" task_firsttype="检测任务" |eval task_status=case(status="未认领","未认领",status="已关闭","已关闭",status="已完成" OR status="审核中","审核中",1=1,"处理中")|top 0 task_status|eval tag="合规任务"|xyseries tag task_status count|table tag 未认领 处理中 审核中 已关闭|addtotals fieldname=total |eval percent=round('已关闭'/total*100,0)|append [|makeresults|eval percent=0]|table 未认领 处理中 审核中 已关闭 total percent|fillnull value=0 未认领 处理中 审核中 已关闭 total|stats sum(*) as *</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$hide$">
+    <panel>
+      <title>合规任务</title>
+      <table>
+        <search>
+          <preview>
+            <set token="hg_count">$result.count$</set>
+            <set token="hg_count_on">$result.count_on$</set>
+            <set token="hg_count_off">$result.count_off$</set>
+          </preview>
+          <query>|tmsapi "获取配置清单"| search task_type="定期任务" name="MLPS-*"|stats count count(eval(status=1)) as count_on count(eval(status=0)) as count_off</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <search>
+          <preview>
+            <set token="hg_total">$result.total$</set>
+            <set token="hg_percent">$result.percent$</set>
+            <set token="hg_status_1">$result.未认领$</set>
+            <set token="hg_status_2">$result.处理中$</set>
+            <set token="hg_status_3">$result.审核中$</set>
+            <set token="hg_status_4">$result.已关闭$</set>
+          </preview>
+          <query>|tmsapi "获取任务清单"| search task_type="定期任务" name="MLPS-*"|eval task_status=case(status="未认领","未认领",status="已关闭","已关闭",status="已完成" OR status="审核中","审核中",1=1,"处理中")|top 0 task_status|eval tag="合规任务"|xyseries tag task_status count|table tag 未认领 处理中 审核中 已关闭|fillnull value=0 未认领 处理中 审核中 已关闭 |addtotals fieldname=total|eval percent=round('已关闭'/total*100,0)|append [|makeresults|eval percent=0]|table 未认领 处理中 审核中 已关闭 total percent |fillnull value=0 未认领 处理中 审核中 已关闭 total|stats sum(*) as *</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$hide$">
+    <panel>
+      <title>安全事件</title>
+      <table>
+        <search>
+          <preview>
+            <set token="event_count">$result.total$</set>
+            <set token="event_count_1">$result.total$</set>
+            <set token="event_count_2">0</set>
+          </preview>
+          <query>| topsekstats `es-con` index="alerting_notice_total" action="search" query="alert_name:* AND src_ip:* AND dst_ip:* AND (status:*) AND (alert_level:严重 OR alert_level:高危 OR alert_level:中危) NOT (status:已忽略) AND threat_stage:* AND threat_category:* AND rule_type:* AND NOT (threat_stage:其他 OR threat_stage:\"\") AND product:*"</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <search>
+          <preview>
+            <set token="event_status_1">$result.未认领$</set>
+            <set token="event_status_2">$result.处理中$</set>
+            <set token="event_status_3">$result.审核中$</set>
+            <set token="event_status_4">$result.已关闭$</set>
+          </preview>
+          <query>| topsekstatsby `es-con` index="alerting_notice_total" action="search" query="alert_name:* AND src_ip:* AND dst_ip:* AND (status:*) AND (alert_level:严重 OR alert_level:高危 OR alert_level:中危) NOT (status:已忽略) AND threat_stage:* AND threat_category:* AND rule_type:* AND NOT (threat_stage:其他 OR threat_stage:\"\") AND product:*" fields="status"|eval task_status=case(status="未认领","未认领",status="已关闭","已关闭",status="已完成" OR status="审核中","审核中",1=1,"处理中")|eval tag="安全事件"|xyseries tag task_status count|table tag 未认领 处理中 审核中 已关闭|addtotals fieldname=total |eval percent=round('已关闭'/total*100,0)|append [|makeresults|eval percent=0]|table 未认领 处理中 审核中 已关闭 total percent|fillnull value=0 未认领 处理中 审核中 已关闭 total|stats sum(*) as *</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row depends="$hide$">
+    <panel>
+      <title>SOAR</title>
+      <table>
+        <search>
+          <preview>
+            <set token="soar_count">$result.count$</set>
+          </preview>
+          <query>|readsoarworkflow |stats count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+      <table>
+        <search>
+          <preview>
+            <set token="soar_total">$result.count$</set>
+            <set token="soar_count_1d">$result.soar_count_1d$</set>
+            <set token="soar_count_7d">$result.soar_count_7d$</set>
+          </preview>
+          <query>|readsoarworkflow "report_list"|eval _time=strptime(create_time,"%F %T")|stats count(eval(_time&gt;=strptime(strftime(now(),"%F 00:00:00"),"%F %T"))) as soar_count_1d count(eval(_time&gt;=strptime(strftime(now()-86400*7,"%F 00:00:00"),"%F %T"))) as soar_count_7d count</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

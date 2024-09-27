@@ -1,0 +1,68 @@
+<form script="tabs.js,tms_configuration.js,tms_general.js" stylesheet="tabs.css,./css/tms_configuration.css,./css/tms_general.css">
+  <label>配置管理</label>
+  <fieldset submitButton="false"></fieldset>
+  <search id="page_navigation">
+    <query>| `page_navigation("$env:app$","$env:page$")`</query>
+  </search>
+  <row>
+    <panel>
+      <html>
+        <div id="page_navigation_div"/>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+       <ul id="tabs" class="nav nav-tabs">
+           <li class="active">
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_config_task" data-elements="tms_configuration_row"><div class="tab-img" id="tab-taskconfig"/>任务配置</a>
+            </li>
+            <li>
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_config_user" data-elements="tms_configuration_row"><div class="tab-img" id="tab-userconfig"/>人员配置</a>
+            </li>
+            <li>
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_config_sla" data-elements="tms_configuration_row"><div class="tab-img" id="tab-slaconfig"/>SLA配置</a>
+            </li>
+            <li style="display:none">
+              <a href="#" class="toggle-tab" data-toggle="tab" iframe_str="tms_plugging_configuration" data-elements="tms_configuration_row"><div class="tab-img" id="tab-firewallblock"/>防火墙封堵</a>
+            </li>
+            <li style="display:none">
+              <a href="#" class="toggle-tab" data-toggle="tab" data-value="blocking-topsek-value" delete-field="blocking" iframe_str="asm_manage_blocking" data-elements="tms_configuration_row">
+                <div class="tab-img" id="tab-switchblock"/>交换机阻断</a>
+            </li>
+        </ul>
+        <legend/>
+    </html>
+    </panel>
+  </row>
+  <row id="tms_configuration_row">
+    <panel>
+      <html>
+        <style>.popOutBg{ width:100%; height:100%; position: fixed; left:0; top:0; background:rgba(0,0,0,.6); z-index:1;display: none;}</style>
+         <div class="popOutBg"/>
+       <iframe src="/app/task_management_system/$iframe_url$?hideChrome=true&amp;hideEdit=true&amp;hideTitle=true&amp;form.level=$form.level$&amp;form.task_name2=$task_name$" id="tms_configuration_iframe" scrolling="no" width="100%" border="0" frameborder="0"/>
+</html>
+    </panel>
+  </row>
+  <row depends="$hide$">
+    <panel>
+      <input type="dropdown" token="iframe_url">
+        <label>iframe_url</label>
+        <choice value="tms_config_task">tms_config_task</choice>
+        <choice value="tms_config_user">tms_config_user</choice>
+        <choice value="tms_config_sla">tms_config_sla</choice>
+        <default>tms_config_task</default>
+        <initialValue>tms_config_task</initialValue>
+      </input>
+      <input type="text" token="task_name">
+        <label>task_name</label>
+        <choice value="tms_config_task">tms_config_task</choice>
+        <choice value="tms_config_user">tms_config_user</choice>
+        <choice value="tms_config_sla">tms_config_sla</choice>
+        <default>*</default>
+        <initialValue>*</initialValue>
+      </input>
+    </panel>
+  </row>
+</form>

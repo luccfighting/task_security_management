@@ -1,0 +1,25 @@
+.linkage_action{
+  position:absolute;
+  z-index:10;
+  background: #ffffff;
+  border-radius:5px;
+  border:1px solid #d1d4d6;
+  text-align:center;
+}
+.linkage_action li{
+  padding: 3px 20px;
+}
+.linkage_action li:hover{
+  cursor:pointer;
+  background: #ecf3f5;
+}
+.control-label {
+    float: left;
+    width: 15%;
+    text-align: right;
+    margin-top: 5px;
+}
+#linkage_group div[data-test="multiselect"],#edit_config_panel select{
+ margin-left: 2%;
+ width: 40%!important;
+}

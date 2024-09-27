@@ -1,0 +1,141 @@
+<form script="tms_related_asmasset.js" stylesheet="./css/tms_related_asmasset.css">
+  <label>资产管理-资产信息</label>
+  <row>
+    <panel depends="$hide$">
+      <input type="text" token="task_id">
+      <label>task_id</label>
+    </input>
+    </panel>
+    <panel>
+      <html>
+        <div class="modal-header-right">
+          <a class="btn btn-horizon modal-btn-primary btn-topsek-edit" style="padding: 6px 15px; font-weight: 500; border: none; ">编辑</a>
+  			  <a class="btn cancel btn-secondary modal-btn-cancel " style="display:none" data-dismiss="modal">取消</a>
+  		    <a class="btn btn-horizon btn-topsek-save" style="padding: 6px 15px; font-weight: 500; border: none;display:none;">保存</a>
+  	    </div>
+        <div id="asm_asset_div">
+      				<table border="0" style="margin: 2em auto;">
+      					<tbody id="unad">
+      						<tr>
+      							<td height="30px" width="100px">
+      								IP
+      							</td>
+      							<td height="30px" width="250px">
+      								<input type="text" class="inp un-topsek-value uneditable-input" value-key="IP" value-key-en="dev_ip" value="" placeholder="请输入IP" disabled="disabled"/>
+                              <span style="color:red;font-size: 25px;">*</span>
+      							</td>
+      							
+      							<td height="30px" width="100px">
+      								IPV6
+      							</td>
+      							<td height="30px" width="250px">
+      								<input type="text" class="inp un-topsek-value" value-key="IPV6" value-key-en="dev_ipv6" is_important="false" value="" placeholder="请输入IPV6" disabled="disabled"/>
+      							</td>
+      					
+      							<td height="30px" width="100px">
+      								域名
+      							</td>
+      							<td height="30px" width="250px">
+      								<input type="text" class="inp un-topsek-value uneditable-input" value-key="域名" value-key-en="domain" is_important="false" value="" placeholder="请输入域名" disabled="disabled"/>
+      							</td>
+      						</tr>
+      						<tr>
+      						  <td height="30px" width="100px">
+      								所属业务
+      							</td>
+      							<td height="30px" width="250px">
+      							  <select class="un-topsek-value" value-key="所属业务" value-key-en="bus_name" placeholder="请选择所属业务" disabled="disabled"/>
+      							  <span style="color:red;font-size: 25px;">*</span>
+      							</td>
+      							<td height="30px" width="100px">
+      								部门名称
+      							</td>
+      							<td height="30px" width="250px">
+      							  <select class="un-topsek-value" value-key="部门名称" value-key-en="department" placeholder="请选择部门名称" disabled="disabled"/>
+      									
+      									<span style="color:red;font-size: 25px;">*</span>
+      							</td>
+      							<td height="30px" width="100px">
+      								责任人
+      							</td>
+      							<td height="30px" width="250px">
+      								<input type="text" class="inp un-topsek-value" value-key="第三方责任人" value-key-en="thirdparty_owner" is_important="false" value="" placeholder="请输入责任人" disabled="disabled"/>
+      							</td>
+      							
+      					
+      							
+      						</tr>
+      						<tr>
+      							<td height="30px" width="100px">
+      								所在区域
+      							</td>
+      							<td height="30px" width="250px">
+      								<input type="text" class="inp un-topsek-value uneditable-input" value-key="所在区域" value-key-en="dev_site" is_important="false" value="" placeholder="请输入所在区域" disabled="disabled"/>
+      							</td>
+      							
+      							<td height="30px" width="100px">
+      								部署区域
+      							</td>
+      							<td height="30px" width="250px">
+      							  <select class="un-topsek-value" value-key="部署区域" value-key-en="dev_zone" placeholder="请选择部署区域" disabled="disabled"/>
+      							</td>
+      							<td height="30px" width="100px">
+      								信创
+      							</td>
+      								<td height="30px" width="250px">
+    								    <select class="un-topsek-value" value-key="信创" value-key-en="is_xc" placeholder="请选择是否是信创资产" disabled="disabled">
+    								      <option value="是">是</option>
+    								      <option value="否">否</option>
+    								    </select>
+      							</td>
+      					  </tr>
+      					  <tr>
+      							<td height="30px" width="100px">
+      								设备类型
+      							</td>
+      								<td height="30px" width="250px">
+      								  <select class="un-topsek-value" value-key="设备类型" value-key-en="dev_type" placeholder="请选择设备类型" disabled="disabled">
+    								    </select>
+      							</td>
+      					  
+      							<td height="30px" width="100px">
+      								设备子类
+      							</td>
+      								<td height="30px" width="250px">
+      								  <select class="un-topsek-value" value-key="设备子类" value-key-en="dev_class" placeholder="请选择设备子类" disabled="disabled">
+    								    </select>
+      							</td>
+      					  		</tr>
+      						<tr>			  
+        				    <td height="30px" width="100px">
+        								维保开始时间
+        							</td>
+        							<td height="30px" width="250px">
+        								<input type="date" class="inp un-topsek-value" value-key="维保开始时间" value-key-en="ma_start_time" is_important="false" value="" placeholder="填写格式：yyyy/mm/dd" disabled="disabled"/>
+        							</td>
+      					
+        				    <td height="30px" width="100px">
+        								维保结束时间
+        							</td>
+        							<td height="30px" width="250px">
+        								<input type="date" class="inp un-topsek-value" value-key="维保结束时间" value-key-en="ma_end_time" is_important="false" value="" placeholder="填写格式：yyyy/mm/dd" disabled="disabled"/>
+        							</td>
+      						</tr>
+      					  <tr>
+      					    <td height="30px" width="100px">
+      								资产描述
+      							</td>
+      								<td height="30px" width="250px" colspan="3">
+      								 <textarea type="text" class="un-topsek-value" value-key="资产描述" value-key-en="description" is_important="false" value="" placeholder="请填写资产描述，选填项" disabled="disabled"/>
+      							</td>
+      					  </tr>
+      					</tbody>
+      				</table>
+      			</div>
+      			<div class="modal-footer-center">
+      		    
+      	    </div>
+      </html>
+    </panel>
+  </row>
+</form>

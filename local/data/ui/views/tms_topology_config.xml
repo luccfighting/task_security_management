@@ -1,0 +1,103 @@
+<dashboard script="./js/tms_topology_config.js" stylesheet="./css/tms_topology_config.css,./css/jquery.flowchart.css">
+  <label>拓扑流程配置</label>
+  <row id="row_1">
+    <panel id="panel_1">
+      <html>
+      <div>流程控件</div>
+      <div class="draggable_operators">
+		<!--<div class="draggable_operators_label">-->
+		<!--	Operators (drag and drop them in the flowchart):-->
+		<!--</div>-->
+		<button class="create_operator">创建组件</button>
+		<div class="draggable_operators_divs">
+			<div class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1" data-title="起点">起点</div>
+			<div class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0" data-title="终点">终点</div>
+			<div class="draggable_operator" data-nb-inputs="1" data-nb-outputs="2" data-title="IF判断">IF判断</div>
+		</div>
+	</div>
+    </html></panel>
+
+  <panel id="panel_2">
+    <html>
+	<style>
+	  .draggable_operator {
+  	  width: 8rem;
+      height: 10rem;
+      text-align: center;
+      display: inline-block;
+      padding: 2px 5px 2px 5px;
+      border: 1px solid #ccc;
+      cursor: grab;
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;   /* Chrome/Safari/Opera */
+      -khtml-user-select: none;    /* Konqueror */
+      -moz-user-select: none;      /* Firefox */
+      -ms-user-select: none;       /* IE/Edge */
+      user-select: none;           /* non-prefixed version, currently
+                                      not supported by any browser */
+    }
+    
+    .draggable_operators {
+      margin-top: 10px;
+    }
+    
+    .draggable_operators_label {
+      margin-bottom: 5px;
+    }
+    
+    .draggable_operators_divs {
+      margin-bottom: 20px;
+    }
+    
+    .delete_selected_button {
+      margin-bottom: 20px;
+    }
+		.flowchart-example-container {
+			width: 100%;
+			height: calc(100vh - 100px);
+			background: white;
+			border: 1px solid #BBB;
+			margin-bottom: 10px;
+		}
+		#row_1{
+		height:calc(100vh - 100px);
+		}
+		#panel_1{
+		height:calc(100vh - 100px);
+		width:20rem !important;
+		}
+		#panel_2{
+		height:calc(100vh - 100px);
+		width:calc(100% - 20rem) !important;
+		}
+	</style>
+
+<body>
+	<!--<h1>Semi-minimalist usage sample</h1>-->
+	<!--<h4>Sample created with basis on some from Sebastien Drouyer, original author's <a href="https://sebastien.drouyer.com/jquery.flowchart-demo/">website</a>.</h4>-->
+	<h4>流程图</h4>
+	<div id="chart_container">
+		<div class="flowchart-example-container" id="flowchartworkspace"></div>
+	</div>
+	
+	
+	<button class="delete_selected_button">Delete selected operator / link</button>
+	<div id="operator_properties" style="display: block;">
+		<label for="operator_title">Operator's title: </label><input id="operator_title" type="text"/>
+	</div>
+	<div id="link_properties" style="display: block;">
+		<label for="link_color">Link's color: </label><input id="link_color" type="color"/>
+	</div>
+	<button class="get_data" id="get_data">Get data</button>
+	<button class="set_data" id="set_data">Set data</button>
+	<button id="save_local">Save to local storage</button>
+	<button id="load_local">Load from local storage</button>
+	<div>
+		<textarea id="flowchart_data"></textarea>
+	</div>
+
+</body>
+
+
+  </html></panel></row>
+</dashboard>

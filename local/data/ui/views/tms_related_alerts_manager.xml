@@ -1,0 +1,16 @@
+<dashboard script="tms_related_alerts_manager.js" stylesheet="./css/tms_related_alerts_manager.css">
+  <label>相关告警-审核</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>`task_alert`|search [|tmsapi "获取任务明细" "$taskid$"|table event_id]|fields - event_id</query>
+          <earliest>-7d@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

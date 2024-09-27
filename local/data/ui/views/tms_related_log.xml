@@ -1,0 +1,28 @@
+<dashboard script="tms_related_log.js" stylesheet="./css/tms_related_log.css">
+  <label>审计日志</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| tmsapi "获取任务日志" "$taskid$" 
+| table create_time audit_log 
+| rename create_time as 创建时间 audit_log as 审计日志 
+| eval tag=1 
+| eventstats count
+| append 
+    [| makeresults 
+    | eval 创建时间="",审计日志=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1 
+| fields - count2 _time tag</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

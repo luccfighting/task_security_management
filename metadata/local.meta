@@ -1,0 +1,498 @@
+[app/ui]
+version = 7.2.0
+modtime = 1645668351.327914000
+
+[app/launcher]
+version = 7.2.0
+modtime = 1645668351.332698000
+
+[views/tms_configuration]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1672900022.255811000
+
+[views/tms_config_task]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1710226907.478367000
+
+[views/tms_config_user]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1689156993.395797000
+
+[views/tms_config_sla]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1655010879.036387000
+
+[views/tms_mytask]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1689156830.276255000
+
+[views/tms_related_journal]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1663655380.643024000
+
+[views/tms_related_device]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1711099035.910612000
+
+[views/tms_related_alerts]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1677563038.940210000
+
+[views/tms_related_task]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1655007136.276171000
+
+[views/tms_related_file]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1663655976.085743000
+
+[views/tms_related_log]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1663656085.377615000
+
+[views/tms_overview]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1678357489.746430000
+
+[nav/default]
+access = read : [ admin ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1718694826.779307000
+
+[views/tms_related_contact]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1663656316.253416000
+
+[views/tms_related_alerts-manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102136.210176000
+
+[views/tms_related_journal_manager]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1663652205.929850000
+
+[views/tms_related_device-manager]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102246.858576000
+
+[views/tms_related_file-manager]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102266.060076000
+
+[views/tms_related_contact-manager]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102275.387260000
+
+[views/tms_related_task-manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102322.964371000
+
+[views/tms_related_log-manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1646102422.122402000
+
+[views/tms_related_contact_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1663656587.876426000
+
+[views/tms_related_device_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1663656771.147224000
+
+[views/tms_related_alerts_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1663656507.009443000
+
+[views/tms_related_task_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1646128914.373747000
+
+[views/tms_related_file_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1663656818.808589000
+
+[views/tms_related_log_manager]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1663656884.191958000
+
+[indexes/shixi_test]
+owner = task_admin
+version = 7.2.0
+modtime = 1646112935.021797000
+
+[commands/*]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = nobody
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E9%80%BE%E6%9C%9F%E6%8F%90%E9%86%92]
+export = none
+owner = task_admin
+version = 7.2.0
+modtime = 1649248006.932347000
+
+[savedsearches/%E8%B5%84%E4%BA%A7%E9%A3%8E%E9%99%A9%E5%91%8A%E8%AD%A6%E5%85%A5%E4%BB%BB%E5%8A%A1]
+export = none
+owner = task_admin
+version = 7.2.0
+modtime = 1646225033.399374000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E5%8D%B3%E5%B0%86%E9%80%BE%E6%9C%9F%E6%8F%90%E9%86%92]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = task_admin
+version = 7.2.0
+modtime = 1649248013.196983000
+
+[indexes/shixi_log]
+owner = task_admin
+version = 7.2.0
+modtime = 1646293663.709089000
+
+[views/tms_statistic]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1678357904.496554000
+
+[macros/task_alert]
+export = system
+owner = task_admin
+version = 7.2.0
+modtime = 1647684808.445991000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%90%88%E8%A7%84%E5%9F%BA%E7%BA%BF]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187268.146658000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E4%B8%BB%E6%9C%BA%E6%BC%8F%E6%B4%9E]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187245.556107000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%BA%94%E7%94%A8%E6%BC%8F%E6%B4%9E]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187242.317773000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%BC%B1%E5%8F%A3%E4%BB%A4]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187230.744557000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-API%E9%A3%8E%E9%99%A9]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187235.180572000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187239.026447000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%AE%89%E5%85%A8%E4%BA%8B%E4%BB%B6]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187263.713952000
+
+[indexes/a_tms_task]
+owner = admin
+version = 7.2.0
+modtime = 1649082502.988243000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%AE%89%E5%85%A8%E5%AE%A1%E8%AE%A1]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187272.169702000
+
+[views/tms_security_report]
+owner = admin
+version = 7.2.0
+modtime = 1651730767.348183000
+
+[views/tms_reports_task]
+owner = admin
+version = 7.2.0
+modtime = 1663657061.369657000
+
+[views/tms_plugging_configuration]
+owner = admin
+version = 7.2.0
+modtime = 1663657116.772642000
+
+[macros/getslalist]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1653873414.987993000
+
+[views/tms_soar_result]
+owner = admin
+version = 7.2.0
+modtime = 1655007304.438242000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E5%86%85%E7%BD%91%E9%AB%98%E5%8D%B1%E7%AB%AF%E5%8F%A3]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187254.278221000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E4%BA%92%E8%81%94%E7%BD%91%E9%AB%98%E5%8D%B1%E7%AB%AF%E5%8F%A3]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1707187250.679861000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E6%9C%AA%E7%9F%A5%E5%86%85%E9%83%A8%E8%B5%84%E4%BA%A7]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1657001441.156226000
+
+[savedsearches/%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86-%E6%9C%AA%E7%9F%A5%E5%86%85%E9%83%A8%E7%AB%AF%E5%8F%A3]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1657001447.244319000
+
+[views/tms_general_config]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706253502.173749000
+
+[views/tms_task_asm]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706254181.589739000
+
+[views/tms_mytask_manager_for_asm]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706254789.753514000
+
+[views/tms_mytask_for_asm]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706254971.485829000
+
+[views/tms_task_xdr]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706255349.662234000
+
+[views/tms_mytask_for_xdr]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706255526.856994000
+
+[views/tms_mytask_manager_for_xdr]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1716536756.929104000
+
+[views/tms_related_asmasset]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706517705.761967000
+
+[views/tms_task_cgsop]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706518283.467628000
+
+[views/tms_mytask_for_cgsop]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706518759.517495000
+
+[views/tms_mytask_manager_for_cgsop]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706519215.874575000
+
+[views/tms_config_task_for_cgsop]
+export = system
+owner = qbs
+version = 7.2.0
+modtime = 1706781672.814761000
+
+[views/tms_task_cmsoc]
+version = 7.2.0
+modtime = 1721703151.785429000
+
+[views/tms_mytask_for_cmsoc]
+version = 7.2.0
+modtime = 1710233139.032037000
+
+[views/tms_config_task_for_cmsoc]
+access = read : [ admin, asset_role, esc_lucius, esc_role, evaluate_admin, evaluate_user, mss_networksecurity_hosting, shaowei13, tms_reviewer, xpcm ], write : [ admin ]
+export = system
+owner = nobody
+version = 7.2.0
+modtime = 1718766686.104132000
+
+[views/tms_topology_config]
+owner = admin
+version = 7.2.0
+modtime = 1723197716.510691000
+
+[views/tms_task_portrait_v2]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1716341951.747631000
+
+[views/tms_task_portrait]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1716280379.542884000
+
+[views/tms_config]
+owner = admin
+version = 7.2.0
+modtime = 1716366762.979137000
+
+[views/tms_asm_task_portrait]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1716536967.215036000
+
+[views/tms_mytask_for_mss]
+access = read : [ admin, asset_role, ceshi_role, erying_admin, esc_role, evaluate_admin, evaluate_user, test, tms_reviewer, upload_role, yiying_admin ], write : [ admin ]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1723776752.843060000
+
+[views/tms_config_mss]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = zzb
+version = 7.2.0
+modtime = 1717731420.159372000
+
+[views/tms_mytask_for_mss2]
+access = read : [ * ], write : [ admin, power ]
+export = system
+owner = zzb
+version = 7.2.0
+modtime = 1719554259.044279000
+
+[views/tms_mss_task_portrait]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1718956978.680768000
+
+[views/tms_xdr_task_portrait]
+export = system
+owner = admin
+version = 7.2.0
+modtime = 1718698580.192255000

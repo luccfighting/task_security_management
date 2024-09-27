@@ -1,0 +1,47 @@
+<dashboard script="tms_related_file_manager.js" stylesheet="./css/tms_related_file_manager.css">
+  <label>文档记录-审核</label>
+  <search>
+    <preview>
+      <set token="isowner">$result.isowner$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_info where user_name='$env:user$' and id='$taskid$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+|stats count|eval user="$env:user$"|eval isowner=if(count&gt;0 OR user="soc_manager","true","false")</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <search>
+    <preview>
+      <set token="task_status">$result.status$</set>
+    </preview>
+    <query>| tmsdbquery "select" "select * from task_info where id='$taskid$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"
+|table status</query>
+    <earliest>-24h@h</earliest>
+    <latest>now</latest>
+  </search>
+  <row>
+    <panel>
+      <html>
+      <div style="text-align:right;margin: 5px 10px 0px 0px;">
+        <div class="ce_tree_icons" style="margin-left: 5px;">
+          <button title="" class="ce_upload_file btn btn-primary btn-horizon one" uploaduser="$env:user$" defaultcsv="upload_demo.csv" data-original-title="Upload a file">上传文件</button>
+
+        </div>
+      </div>
+      <legend/>
+      </html>
+      <table id="task_file_table">
+        <search>
+          <query>| tmsdbquery "select" "select * from task_file where task_id='$taskid$'" "127.0.0.1" "3306" "hjsecurity" "esc@t0pSek" "isoc_task"| eval 操作=file_id
+| table create_time filename 操作
+
+| rename create_time as 上传时间 filename as 文件名称</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

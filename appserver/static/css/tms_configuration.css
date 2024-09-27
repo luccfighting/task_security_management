@@ -1,0 +1,32 @@
+
+#tms_configuration_row{
+    padding:0 !important;
+}
+
+#tms_configuration_row .dashboard-panel {
+    background: unset;
+    margin: 0 0;
+    position: relative;
+}
+.tab-img{
+    width: 20px;
+    height: 20px;
+    background-size: 100% !important;
+    float: left;
+    margin: 5px 2px !important;
+}
+#tab-taskconfig{
+    background:url(../images/任务配置.png) 0 0 no-repeat;
+}
+#tab-userconfig{
+    background:url(../images/人员配置.png) 0 0 no-repeat;
+}
+#tab-slaconfig{
+    background:url(../images/SLA配置.png) 0 0 no-repeat;
+}
+#tab-firewallblock{
+    background:url(../images/防火墙封堵.png) 0 0 no-repeat;
+}
+#tab-switchblock{
+    background:url(../images/交换机阻断.png) 0 0 no-repeat;
+}

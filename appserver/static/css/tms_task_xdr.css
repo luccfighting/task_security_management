@@ -1,0 +1,10 @@
+.dashboard-header {
+    margin-bottom: 0px  !important;
+    padding-top: 0px  !important;
+    min-height: 0px  !important;
+}
+.dashboard-body {
+    padding: 0 0px 0px  !important;
+    background-color: #f2f4f5  !important;
+    min-height: 500px  !important;
+}

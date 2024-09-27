@@ -1,0 +1,60 @@
+<form stylesheet="./css/tms_reports_task.css" script="tms_reports_task.js">
+  <label>任务报表</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <single>
+        <search>
+          <query>`asm_assets_bus` 
+| dedup bus_name 
+| stats count</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="colorMode">block</option>
+        <option name="drilldown">none</option>
+        <option name="height">60</option>
+        <option name="rangeColors">["0x7ABBFD","0x7ABBFD"]</option>
+        <option name="rangeValues">[0]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="underLabel">任务总数</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <input type="multiselect" token="bus_field" id="bus_field">
+        <label>字段选择</label>
+        <fieldForLabel>column</fieldForLabel>
+        <fieldForValue>column</fieldForValue>
+        <search>
+          <query>| tmsapi "获取任务清单"|eval task_status_type=case(status="已完成" OR status="已关闭" OR status="未通过","处理完成",1=1,task_type)| eval 操作=" id='"+id+"'"
+| table name level create_user description user_name role status create_time  
+| rename name as 任务名称 level as 任务等级 create_user as 创建者 description as 任务描述 status as 任务状态 user_name as 负责人 role as 角色 create_time as 创建时间 sla_time as 超时进度
+| head 1
+| transpose</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <default>任务名称,任务等级,任务描述,创建时间,创建者,负责人,角色,任务状态</default>
+        <initialValue>任务名称,任务等级,任务描述,创建时间,创建者,负责人,角色,任务状态</initialValue>
+        <delimiter> </delimiter>
+      </input>
+      <table id="bus_table">
+        <search>
+          <query>| tmsapi "获取任务清单"|eval task_status_type=case(status="已完成" OR status="已关闭" OR status="未通过","处理完成",1=1,task_type)| eval 操作=" id='"+id+"'"
+| table name level create_user description user_name role status create_time  
+| rename name as 任务名称 level as 任务等级 create_user as 创建者 description as 任务描述 status as 任务状态 user_name as 负责人 role as 角色 create_time as 创建时间 sla_time as 超时进度
+| table $bus_field$</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="wrap">false</option>
+      </table>
+    </panel>
+  </row>
+</form>

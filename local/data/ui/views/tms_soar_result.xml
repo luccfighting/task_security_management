@@ -1,0 +1,31 @@
+<dashboard script="tms_soar_result.js" stylesheet="./css/tms_soar_result.css">
+  <label>SOAR结果跟踪</label>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>| readsoarworkflow "scan_result" "$taskid$"
+| search app_name!="WebHook" app_name!="任务ID"
+| rename STATUS as status
+| eval status=case(status=="0","正常",status=="1","警告",status=="2","错误")
+| eval _raw=result
+| spath message
+| eval result=if(isnull(message),result,message)
+| fields - _raw message
+| rename id as ID app_name as 流程名称 result as 执行日志 status as 执行结果 create_time as 执行时间|eval tag=1
+| append 
+    [| makeresults 
+    | eval ID=""
+    | eval tag=0] 
+| eventstats count as count2 
+| search count2=1 OR tag=1
+| fields - count2 _time tag</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
